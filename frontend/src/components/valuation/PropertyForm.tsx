@@ -15,6 +15,7 @@ import {
   Calculator,
 } from 'lucide-react'
 import LoadingSpinner from '@/components/shared/LoadingSpinner'
+import { LiquidGlassButton, LiquidGlassSelect } from '@/components/ui/liquid-glass'
 import type { PropertyFormData, LocationsResponse } from '@/types'
 
 // ============================================================
@@ -186,11 +187,21 @@ export default function PropertyForm({
     register,
     handleSubmit,
     reset,
+    watch,
+    setValue,
     formState: { errors },
   } = useForm<FormInput, any, FormOutput>({
     resolver: zodResolver(propertySchema),
     defaultValues: initialValues || PRESETS[0].data,
   })
+
+  const cityVal = watch('city')
+  const propertyTypeVal = watch('property_type')
+  const bhkVal = watch('bhk')
+  const bathroomsVal = watch('bathrooms')
+  const balconiesVal = watch('balconies')
+  const furnishingVal = watch('furnishing_status')
+  const ownershipVal = watch('ownership_type')
 
   // Update form if initialValues change (e.g. from history reload)
   useEffect(() => {
@@ -222,14 +233,21 @@ export default function PropertyForm({
         </div>
         <div className="flex items-center gap-2.5 overflow-x-auto pb-1 scrollbar-none">
           {PRESETS.map((preset) => (
-            <button
+            <LiquidGlassButton
               key={preset.label}
               type="button"
               onClick={() => applyPreset(preset.data)}
-              className="flex-shrink-0 px-4 py-2 rounded-2xl text-xs font-semibold liquid-glass-card text-white/80 hover:text-[var(--color-accent)] hover:border-white/30 transition-all font-body cursor-pointer"
+              radius={999}
+              scale={34}
+              aberration={12}
+              bevelDepth={12}
+              frost={0.32}
+              tint={0.08}
+              className="flex-shrink-0"
+              glassClassName="px-4 py-2 text-xs font-semibold text-white/85 hover:text-[var(--color-accent)] font-body"
             >
               {preset.label}
-            </button>
+            </LiquidGlassButton>
           ))}
         </div>
       </div>
@@ -248,17 +266,13 @@ export default function PropertyForm({
             <label className="block text-xs font-medium text-white/70 mb-1.5">
               Metro Region / City <span className="text-[var(--color-accent)]">*</span>
             </label>
-            <select
-              {...register('city')}
-              className="w-full bg-black/60 border border-white/15 text-white focus:border-[var(--color-accent)] focus:bg-black/80 backdrop-blur-md rounded-2xl px-4 py-3 text-sm focus:outline-none"
-            >
-              <option value="">Select City...</option>
-              {cities.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </select>
+            <LiquidGlassSelect
+              ariaLabel="Metro Region / City"
+              placeholder="Select City..."
+              value={String(cityVal ?? '')}
+              onChange={(val) => setValue('city', val, { shouldValidate: true, shouldDirty: true })}
+              options={cities.map((c) => ({ value: c, label: c }))}
+            />
             {errors.city && (
               <p className="text-xs text-[var(--color-danger)] mt-1.5">{errors.city.message}</p>
             )}
@@ -268,17 +282,15 @@ export default function PropertyForm({
             <label className="block text-xs font-medium text-white/70 mb-1.5">
               Property Asset Type <span className="text-[var(--color-accent)]">*</span>
             </label>
-            <select
-              {...register('property_type')}
-              className="w-full bg-black/60 border border-white/15 text-white focus:border-[var(--color-accent)] focus:bg-black/80 backdrop-blur-md rounded-2xl px-4 py-3 text-sm focus:outline-none"
-            >
-              <option value="">Select Type...</option>
-              {propertyTypes.map((t) => (
-                <option key={t} value={t}>
-                  {t}
-                </option>
-              ))}
-            </select>
+            <LiquidGlassSelect
+              ariaLabel="Property Asset Type"
+              placeholder="Select Type..."
+              value={String(propertyTypeVal ?? '')}
+              onChange={(val) =>
+                setValue('property_type', val, { shouldValidate: true, shouldDirty: true })
+              }
+              options={propertyTypes.map((t) => ({ value: t, label: t }))}
+            />
             {errors.property_type && (
               <p className="text-xs text-[var(--color-danger)] mt-1.5">
                 {errors.property_type.message}
@@ -302,17 +314,17 @@ export default function PropertyForm({
             <label className="block text-xs font-medium text-white/70 mb-1.5">
               Bedrooms (BHK) <span className="text-[var(--color-accent)]">*</span>
             </label>
-            <select
-              {...register('bhk')}
-              className="w-full bg-black/60 border border-white/15 text-white focus:border-[var(--color-accent)] focus:bg-black/80 backdrop-blur-md rounded-2xl px-4 py-3 text-sm focus:outline-none"
-            >
-              {[1, 2, 3, 4, 5, 6].map((n) => (
-                <option key={n} value={n}>
-                  {n} BHK
-                </option>
-              ))}
-              <option value="7">7+ BHK</option>
-            </select>
+            <LiquidGlassSelect
+              ariaLabel="Bedrooms (BHK)"
+              value={String(bhkVal ?? '2')}
+              onChange={(val) =>
+                setValue('bhk', Number(val), { shouldValidate: true, shouldDirty: true })
+              }
+              options={[
+                ...[1, 2, 3, 4, 5, 6].map((n) => ({ value: String(n), label: `${n} BHK` })),
+                { value: '7', label: '7+ BHK' },
+              ]}
+            />
             {errors.bhk && (
               <p className="text-xs text-[var(--color-danger)] mt-1.5">{errors.bhk.message}</p>
             )}
@@ -322,16 +334,14 @@ export default function PropertyForm({
             <label className="block text-xs font-medium text-white/70 mb-1.5">
               Bathrooms <span className="text-[var(--color-accent)]">*</span>
             </label>
-            <select
-              {...register('bathrooms')}
-              className="w-full bg-black/60 border border-white/15 text-white focus:border-[var(--color-accent)] focus:bg-black/80 backdrop-blur-md rounded-2xl px-4 py-3 text-sm focus:outline-none"
-            >
-              {[1, 2, 3, 4, 5, 6].map((n) => (
-                <option key={n} value={n}>
-                  {n} Baths
-                </option>
-              ))}
-            </select>
+            <LiquidGlassSelect
+              ariaLabel="Bathrooms"
+              value={String(bathroomsVal ?? '2')}
+              onChange={(val) =>
+                setValue('bathrooms', Number(val), { shouldValidate: true, shouldDirty: true })
+              }
+              options={[1, 2, 3, 4, 5, 6].map((n) => ({ value: String(n), label: `${n} Baths` }))}
+            />
             {errors.bathrooms && (
               <p className="text-xs text-[var(--color-danger)] mt-1.5">
                 {errors.bathrooms.message}
@@ -343,16 +353,17 @@ export default function PropertyForm({
             <label className="block text-xs font-medium text-white/70 mb-1.5">
               Balconies
             </label>
-            <select
-              {...register('balconies')}
-              className="w-full bg-black/60 border border-white/15 text-white focus:border-[var(--color-accent)] focus:bg-black/80 backdrop-blur-md rounded-2xl px-4 py-3 text-sm focus:outline-none"
-            >
-              {[0, 1, 2, 3, 4].map((n) => (
-                <option key={n} value={n}>
-                  {n} {n === 1 ? 'Balcony' : 'Balconies'}
-                </option>
-              ))}
-            </select>
+            <LiquidGlassSelect
+              ariaLabel="Balconies"
+              value={String(balconiesVal ?? '1')}
+              onChange={(val) =>
+                setValue('balconies', Number(val), { shouldValidate: true, shouldDirty: true })
+              }
+              options={[0, 1, 2, 3, 4].map((n) => ({
+                value: String(n),
+                label: `${n} ${n === 1 ? 'Balcony' : 'Balconies'}`,
+              }))}
+            />
             {errors.balconies && (
               <p className="text-xs text-[var(--color-danger)] mt-1.5">
                 {errors.balconies.message}
@@ -380,7 +391,7 @@ export default function PropertyForm({
               type="number"
               placeholder="e.g. 950"
               {...register('carpet_area')}
-              className="w-full bg-black/60 border border-white/15 text-white placeholder-white/40 focus:border-[var(--color-accent)] focus:bg-black/80 backdrop-blur-md rounded-2xl px-4 py-3 text-sm focus:outline-none"
+              className="w-full bg-white/[0.06] border border-white/25 text-white placeholder-white/40 focus:border-white/55 focus:bg-white/[0.1] backdrop-blur-md rounded-2xl px-4 py-3 text-sm focus:outline-none shadow-[inset_0_1px_0_rgba(255,255,255,0.28)]"
             />
             {errors.carpet_area && (
               <p className="text-xs text-[var(--color-danger)] mt-1.5">
@@ -397,7 +408,7 @@ export default function PropertyForm({
               type="number"
               placeholder="e.g. 1250"
               {...register('super_builtup_area')}
-              className="w-full bg-black/60 border border-white/15 text-white placeholder-white/40 focus:border-[var(--color-accent)] focus:bg-black/80 backdrop-blur-md rounded-2xl px-4 py-3 text-sm focus:outline-none"
+              className="w-full bg-white/[0.06] border border-white/25 text-white placeholder-white/40 focus:border-white/55 focus:bg-white/[0.1] backdrop-blur-md rounded-2xl px-4 py-3 text-sm focus:outline-none shadow-[inset_0_1px_0_rgba(255,255,255,0.28)]"
             />
             {errors.super_builtup_area && (
               <p className="text-xs text-[var(--color-danger)] mt-1.5">
@@ -414,7 +425,7 @@ export default function PropertyForm({
               type="number"
               placeholder="e.g. 6"
               {...register('floor_number')}
-              className="w-full bg-black/60 border border-white/15 text-white placeholder-white/40 focus:border-[var(--color-accent)] focus:bg-black/80 backdrop-blur-md rounded-2xl px-4 py-3 text-sm focus:outline-none"
+              className="w-full bg-white/[0.06] border border-white/25 text-white placeholder-white/40 focus:border-white/55 focus:bg-white/[0.1] backdrop-blur-md rounded-2xl px-4 py-3 text-sm focus:outline-none shadow-[inset_0_1px_0_rgba(255,255,255,0.28)]"
             />
             {errors.floor_number && (
               <p className="text-xs text-[var(--color-danger)] mt-1.5">
@@ -431,7 +442,7 @@ export default function PropertyForm({
               type="number"
               placeholder="e.g. 14"
               {...register('total_floors')}
-              className="w-full bg-black/60 border border-white/15 text-white placeholder-white/40 focus:border-[var(--color-accent)] focus:bg-black/80 backdrop-blur-md rounded-2xl px-4 py-3 text-sm focus:outline-none"
+              className="w-full bg-white/[0.06] border border-white/25 text-white placeholder-white/40 focus:border-white/55 focus:bg-white/[0.1] backdrop-blur-md rounded-2xl px-4 py-3 text-sm focus:outline-none shadow-[inset_0_1px_0_rgba(255,255,255,0.28)]"
             />
             {errors.total_floors && (
               <p className="text-xs text-[var(--color-danger)] mt-1.5">
@@ -456,16 +467,14 @@ export default function PropertyForm({
             <label className="block text-xs font-medium text-white/70 mb-1.5">
               Furnishing Status <span className="text-[var(--color-accent)]">*</span>
             </label>
-            <select
-              {...register('furnishing_status')}
-              className="w-full bg-black/60 border border-white/15 text-white focus:border-[var(--color-accent)] focus:bg-black/80 backdrop-blur-md rounded-2xl px-4 py-3 text-sm focus:outline-none"
-            >
-              {furnishingOptions.map((f) => (
-                <option key={f} value={f}>
-                  {f}
-                </option>
-              ))}
-            </select>
+            <LiquidGlassSelect
+              ariaLabel="Furnishing Status"
+              value={String(furnishingVal ?? '')}
+              onChange={(val) =>
+                setValue('furnishing_status', val, { shouldValidate: true, shouldDirty: true })
+              }
+              options={furnishingOptions.map((f) => ({ value: f, label: f }))}
+            />
             {errors.furnishing_status && (
               <p className="text-xs text-[var(--color-danger)] mt-1.5">
                 {errors.furnishing_status.message}
@@ -477,16 +486,14 @@ export default function PropertyForm({
             <label className="block text-xs font-medium text-white/70 mb-1.5">
               Ownership Title <span className="text-[var(--color-accent)]">*</span>
             </label>
-            <select
-              {...register('ownership_type')}
-              className="w-full bg-black/60 border border-white/15 text-white focus:border-[var(--color-accent)] focus:bg-black/80 backdrop-blur-md rounded-2xl px-4 py-3 text-sm focus:outline-none"
-            >
-              {ownershipOptions.map((o) => (
-                <option key={o} value={o}>
-                  {o}
-                </option>
-              ))}
-            </select>
+            <LiquidGlassSelect
+              ariaLabel="Ownership Title"
+              value={String(ownershipVal ?? '')}
+              onChange={(val) =>
+                setValue('ownership_type', val, { shouldValidate: true, shouldDirty: true })
+              }
+              options={ownershipOptions.map((o) => ({ value: o, label: o }))}
+            />
             {errors.ownership_type && (
               <p className="text-xs text-[var(--color-danger)] mt-1.5">
                 {errors.ownership_type.message}
@@ -502,7 +509,7 @@ export default function PropertyForm({
               type="number"
               placeholder="e.g. 3"
               {...register('property_age')}
-              className="w-full bg-black/60 border border-white/15 text-white placeholder-white/40 focus:border-[var(--color-accent)] focus:bg-black/80 backdrop-blur-md rounded-2xl px-4 py-3 text-sm focus:outline-none"
+              className="w-full bg-white/[0.06] border border-white/25 text-white placeholder-white/40 focus:border-white/55 focus:bg-white/[0.1] backdrop-blur-md rounded-2xl px-4 py-3 text-sm focus:outline-none shadow-[inset_0_1px_0_rgba(255,255,255,0.28)]"
             />
             {errors.property_age && (
               <p className="text-xs text-[var(--color-danger)] mt-1.5">
@@ -529,14 +536,21 @@ export default function PropertyForm({
       </div>
 
       {/* Submission CTA */}
-      <button
+      <LiquidGlassButton
         type="submit"
         disabled={isSubmitting}
-        className="w-full flex items-center justify-center gap-3 py-4.5 px-8 rounded-2xl text-base font-semibold tracking-wide transition-all duration-300 solid-white-btn cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+        radius={999}
+        scale={46}
+        aberration={14}
+        bevelDepth={16}
+        frost={0.44}
+        tint={0.2}
+        className="w-full"
+        glassClassName="py-4.5 px-8 text-base font-semibold tracking-wide !border-white/50 text-white"
       >
         {isSubmitting ? (
           <>
-            <LoadingSpinner size={20} color="#050A12" />
+            <LoadingSpinner size={20} color="#FFFFFF" />
             <span>Computing Inference & Calibrating Bounds...</span>
           </>
         ) : (
@@ -545,7 +559,7 @@ export default function PropertyForm({
             <span>Generate Institutional Valuation</span>
           </>
         )}
-      </button>
+      </LiquidGlassButton>
     </form>
   )
 }

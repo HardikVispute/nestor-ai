@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { memo } from 'react'
 import {
   Database,
   Wrench,
@@ -12,12 +12,21 @@ import {
   Scale,
   Sparkles,
 } from 'lucide-react'
+import { LiquidGlass } from '@/components/ui/liquid-glass'
 
-export default function MethodologyPanel() {
+function MethodologyPanel() {
   return (
-    <div className="space-y-8 pb-12">
+    <div className="space-y-8 pb-12 animate-panel-enter">
       {/* Top Banner */}
-      <div className="liquid-glass-panel rounded-2xl p-8 sm:p-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <LiquidGlass
+        radius={32}
+        scale={48}
+        aberration={14}
+        bevelDepth={30}
+        frost={0.36}
+        tint={0.06}
+        className="p-8 sm:p-10 flex flex-col md:flex-row md:items-center justify-between gap-4"
+      >
         <div>
           <h2 className="text-2xl sm:text-3xl font-bold font-heading text-white flex items-center gap-3">
             <BookOpen size={24} className="text-[var(--color-accent)]" />
@@ -28,14 +37,22 @@ export default function MethodologyPanel() {
           </p>
         </div>
 
-        <div className="flex items-center gap-2 text-xs font-mono text-[var(--color-accent)] bg-[rgba(39,215,174,0.12)] px-4 py-2 rounded-2xl border border-[rgba(39,215,174,0.3)] shadow-[inset_0_1px_0_rgba(255,255,255,0.4)]">
+        <div className="flex items-center gap-2 text-xs font-mono text-[var(--color-accent)] bg-[rgba(39,215,174,0.12)] px-4 py-2 rounded-full border border-[rgba(39,215,174,0.3)] shadow-[inset_0_1px_0_rgba(255,255,255,0.4)]">
           <ShieldCheck size={16} />
           <span>Champion Model: HistGradientBoosting</span>
         </div>
-      </div>
+      </LiquidGlass>
 
       {/* 01. Machine Learning Formulation */}
-      <div className="liquid-glass-panel rounded-2xl p-8 sm:p-10 space-y-4">
+      <LiquidGlass
+        radius={32}
+        scale={48}
+        aberration={14}
+        bevelDepth={30}
+        frost={0.36}
+        tint={0.06}
+        className="p-8 sm:p-10 space-y-4"
+      >
         <div className="flex items-center gap-2 pb-3 border-b border-white/10">
           <Cpu size={18} className="text-[var(--color-accent)]" />
           <h3 className="text-sm font-bold uppercase tracking-wider text-white">
@@ -63,10 +80,18 @@ export default function MethodologyPanel() {
           <code className="text-[var(--color-accent-blue)] font-mono">exp(y_pred) - 1</code>, directly
           minimizing percentage error across all price segments.
         </p>
-      </div>
+      </LiquidGlass>
 
       {/* 02. Data Engineering & Leakage Guard */}
-      <div className="liquid-glass-panel rounded-2xl p-8 sm:p-10 space-y-4">
+      <LiquidGlass
+        radius={32}
+        scale={48}
+        aberration={14}
+        bevelDepth={30}
+        frost={0.36}
+        tint={0.06}
+        className="p-8 sm:p-10 space-y-4"
+      >
         <div className="flex items-center gap-2 pb-3 border-b border-white/10">
           <Database size={18} className="text-[var(--color-accent-blue)]" />
           <h3 className="text-sm font-bold uppercase tracking-wider text-white">
@@ -124,10 +149,18 @@ export default function MethodologyPanel() {
             spatial, and locational features.
           </p>
         </div>
-      </div>
+      </LiquidGlass>
 
       {/* 03. Model Evaluation Comparison */}
-      <div className="liquid-glass-panel rounded-2xl p-8 sm:p-10 space-y-4">
+      <LiquidGlass
+        radius={32}
+        scale={48}
+        aberration={14}
+        bevelDepth={30}
+        frost={0.36}
+        tint={0.06}
+        className="p-8 sm:p-10 space-y-4"
+      >
         <div className="flex items-center justify-between pb-4 border-b border-white/10">
           <div className="flex items-center gap-2.5">
             <BarChart2 size={18} className="text-[var(--color-accent)]" />
@@ -196,10 +229,18 @@ export default function MethodologyPanel() {
             </tbody>
           </table>
         </div>
-      </div>
+      </LiquidGlass>
 
       {/* 04. Calibrated Uncertainty Intervals */}
-      <div className="liquid-glass-panel rounded-2xl p-8 sm:p-10 space-y-4">
+      <LiquidGlass
+        radius={32}
+        scale={48}
+        aberration={14}
+        bevelDepth={30}
+        frost={0.36}
+        tint={0.06}
+        className="p-8 sm:p-10 space-y-4"
+      >
         <div className="flex items-center gap-2 pb-3 border-b border-white/10">
           <Scale size={18} className="text-[var(--color-accent)]" />
           <h3 className="text-sm font-bold uppercase tracking-wider text-white">
@@ -217,7 +258,9 @@ export default function MethodologyPanel() {
           In addition, for each valuation request, the system retrieves the 5 nearest physical neighbors from the
           corpus using normalized Euclidean distance over [Carpet Area, BHK, Floor, Unit Rate, City].
         </p>
-      </div>
+      </LiquidGlass>
     </div>
   )
 }
+
+export default memo(MethodologyPanel)

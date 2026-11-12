@@ -1,0 +1,79 @@
+{
+  "model_name": "HistGradientBoosting",
+  "model_type": "TransformedTargetRegressor",
+  "dataset_source": "Kaggle: juhibhojani/house-price",
+  "training_timestamp": "2026-11-10T11:16:32.041821+00:00",
+  "random_seed": 42,
+  "sample_counts": {
+    "total_cleaned_samples": 65000,
+    "train_samples": 52000,
+    "test_samples": 13000
+  },
+  "feature_schema": [
+    "city",
+    "carpet_area_sqft",
+    "super_area_sqft",
+    "area_basis",
+    "is_carpet_missing",
+    "is_super_missing",
+    "bhk",
+    "bathrooms",
+    "balconies",
+    "is_balcony_missing",
+    "floor_number",
+    "total_floors",
+    "floor_ratio",
+    "is_floor_missing",
+    "furnishing_status",
+    "has_parking",
+    "ownership_type",
+    "transaction_type",
+    "status"
+  ],
+  "target_variable": "price_inr",
+  "target_transformation": "log1p(price) -> expm1(pred)",
+  "evaluation_metrics_held_out": {
+    "MAE_INR": 2561670.25,
+    "RMSE_INR": 6654209.47,
+    "MAPE_pct": 24.36,
+    "R2_score": 0.7524
+  },
+  "residual_accuracy_statistics": {
+    "mean_residual_inr": 628108.1731630263,
+    "std_residual_inr": 6624498.756047184,
+    "within_10_pct_accuracy": 28.599999999999998,
+    "within_20_pct_accuracy": 53.400000000000006,
+    "within_30_pct_accuracy": 71.57692307692308
+  },
+  "candidate_models_benchmarked": {
+    "Baseline (Median)": {
+      "MAE_INR": 5919710.77,
+      "RMSE_INR": 13830353.29,
+      "MAPE_pct": 64.15,
+      "R2_score": -0.0695
+    },
+    "Ridge Regression": {
+      "MAE_INR": 20721118.49,
+      "RMSE_INR": 1876623032.34,
+      "MAPE_pct": 45.55,
+      "R2_score": -19689.7183
+    },
+    "Random Forest": {
+      "MAE_INR": 2662358.33,
+      "RMSE_INR": 6254029.56,
+      "MAPE_pct": 27.09,
+      "R2_score": 0.7813
+    },
+    "HistGradientBoosting": {
+      "MAE_INR": 2561670.25,
+      "RMSE_INR": 6654209.47,
+      "MAPE_pct": 24.36,
+      "R2_score": 0.7524
+    }
+  },
+  "data_limitations": [
+    "Dataset represents portal asking prices (Magicbricks listing quotes), not final deed registered prices.",
+    "Realized sale transactions typically conclude 5-15% below initial ask.",
+    "price_per_sqft strictly excluded from input feature set to eliminate target leakage."
+  ]
+}

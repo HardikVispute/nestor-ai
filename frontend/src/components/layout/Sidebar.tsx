@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { memo, useCallback, useRef, useState } from 'react'
 import {
   LayoutDashboard,
   Calculator,
@@ -8,6 +8,8 @@ import {
   TrendingUp,
   BookOpen,
 } from 'lucide-react'
+import { usePerformanceMode } from '@/contexts/PerformanceContext'
+import { LiquidGlass } from '@/components/ui/liquid-glass'
 import type { NavItem } from '@/types'
 
 interface SidebarProps {
@@ -18,7 +20,6 @@ interface SidebarProps {
 interface NavConfig {
   id: NavItem
   label: string
-  shortLabel: string
   icon: React.ComponentType<{ size?: number; className?: string }>
 }
 
@@ -26,101 +27,199 @@ const NAV_ITEMS: NavConfig[] = [
   {
     id: 'overview',
     label: 'Overview',
-    shortLabel: 'Overview',
     icon: LayoutDashboard,
   },
   {
     id: 'valuation',
     label: 'New Valuation',
-    shortLabel: 'Valuation',
     icon: Calculator,
   },
   {
     id: 'history',
     label: 'Valuation History',
-    shortLabel: 'History',
     icon: History,
   },
   {
     id: 'market',
     label: 'Market Intelligence',
-    shortLabel: 'Market',
     icon: TrendingUp,
   },
   {
     id: 'methodology',
     label: 'Model Methodology',
-    shortLabel: 'Method',
     icon: BookOpen,
   },
 ]
 
-export default function Sidebar({ activeNav, onNavChange }: SidebarProps) {
+const ITEM_SIZE = 52
+const ITEM_GAP = 10
+const ITEM_STEP = ITEM_SIZE + ITEM_GAP
+
+function Sidebar({ activeNav, onNavChange }: SidebarProps) {
+  const [dragTop, setDragTop] = useState<number | null>(null)
+  const dragStateRef = useRef<{
+    startY: number
+    startTop: number
+    lastIndex: number
+  } | null>(null)
+
+  const { isLightweight } = usePerformanceMode()
+
+  const activeIndex = Math.max(
+    0,
+    NAV_ITEMS.findIndex((item) => item.id === activeNav),
+  )
+  const maxTop = (NAV_ITEMS.length - 1) * ITEM_STEP
+  const restingTop = activeIndex * ITEM_STEP
+  const currentBubbleTop = dragTop !== null ? dragTop : restingTop
+  const previewIndex = Math.max(
+    0,
+    Math.min(NAV_ITEMS.length - 1, Math.round(currentBubbleTop / ITEM_STEP)),
+  )
+
+  const handleBubblePointerDown = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      e.preventDefault()
+      e.stopPropagation()
+      e.currentTarget.setPointerCapture(e.pointerId)
+      dragStateRef.current = {
+        startY: e.clientY,
+        startTop: restingTop,
+        lastIndex: activeIndex,
+      }
+      setDragTop(restingTop)
+    },
+    [restingTop, activeIndex],
+  )
+
+  const handleBubblePointerMove = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      const state = dragStateRef.current
+      if (!state) return
+      const deltaY = e.clientY - state.startY
+      const clamped = Math.max(0, Math.min(maxTop, state.startTop + deltaY))
+      setDragTop(clamped)
+
+      const nextIndex = Math.max(
+        0,
+        Math.min(NAV_ITEMS.length - 1, Math.round(clamped / ITEM_STEP)),
+      )
+      if (nextIndex !== state.lastIndex) {
+        state.lastIndex = nextIndex
+        onNavChange(NAV_ITEMS[nextIndex].id)
+      }
+    },
+    [maxTop, onNavChange],
+  )
+
+  const finishDrag = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      const state = dragStateRef.current
+      if (!state) return
+      if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+        e.currentTarget.releasePointerCapture(e.pointerId)
+      }
+      const finalIndex = Math.max(
+        0,
+        Math.min(NAV_ITEMS.length - 1, Math.round((dragTop ?? restingTop) / ITEM_STEP)),
+      )
+      dragStateRef.current = null
+      setDragTop(null)
+      if (NAV_ITEMS[finalIndex].id !== activeNav) {
+        onNavChange(NAV_ITEMS[finalIndex].id)
+      }
+    },
+    [dragTop, restingTop, activeNav, onNavChange],
+  )
+
   return (
-    <aside
-      className="relative z-30 flex flex-col items-center justify-between flex-shrink-0 h-screen select-none border-r border-white/10 w-[88px] min-w-[88px] max-w-[88px]"
-      style={{
-        width: 88,
-        minWidth: 88,
-        maxWidth: 88,
-        backgroundColor: 'rgba(0, 0, 0, 0.75)',
-        backdropFilter: 'blur(24px)',
-        WebkitBackdropFilter: 'blur(24px)',
-      }}
-      aria-label="Primary Navigation Rail"
+    <div
+      className="relative flex-shrink-0 h-screen z-40 select-none flex items-center justify-center"
+      style={{ width: 100, minWidth: 100, maxWidth: 100 }}
     >
-      {/* Top Brand Logo */}
-      <div className="flex flex-col items-center justify-center pt-6 pb-4 w-full">
-        <button
-          onClick={() => onNavChange('overview')}
-          className="group relative flex items-center justify-center w-12 h-12 rounded-2xl transition-all duration-300 focus:outline-none liquid-glass-card cursor-pointer"
-          title="NESTOR AI — Property Valuation Intelligence"
+      <aside
+        className="relative z-40"
+        style={{ width: 76 }}
+        aria-label="Primary Floating Navigation"
+      >
+        <LiquidGlass
+          eager
+          radius={999}
+          scale={32}
+          aberration={12}
+          bevelDepth={14}
+          frost={0.34}
+          tint={0.07}
+          className="w-full p-3 !border-white/25"
+          style={{
+            backgroundColor: isLightweight ? 'rgba(10, 14, 22, 0.9)' : 'rgba(255, 255, 255, 0.065)',
+          }}
         >
-          <span className="text-xl font-bold tracking-wider text-[var(--color-accent)] font-mono">
-            N
-          </span>
-          <span className="absolute -bottom-1 -right-1 w-2.5 h-2.5 rounded-full border-2 border-black bg-[var(--color-accent)]" />
-        </button>
-        <span className="text-[10px] font-bold tracking-widest uppercase mt-2 text-white/50">
-          NESTOR
-        </span>
-      </div>
+          <nav
+            className="relative flex flex-col w-full"
+            style={{ gap: ITEM_GAP }}
+          >
+            {/* 5 Icon-Only Navigation Items */}
+            {NAV_ITEMS.map((item, idx) => {
+              const isSelected = idx === previewIndex
+              const Icon = item.icon
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  title={item.label}
+                  aria-label={item.label}
+                  onClick={() => onNavChange(item.id)}
+                  className={`relative z-10 flex items-center justify-center w-[52px] h-[52px] rounded-full transition-colors duration-200 focus:outline-none cursor-pointer ${
+                    isSelected
+                      ? 'text-white'
+                      : 'text-white/55 hover:text-white hover:bg-white/[0.08]'
+                  }`}
+                >
+                  <Icon size={25} className="flex-shrink-0" />
+                </button>
+              )
+            })}
 
-      {/* Main Nav Items */}
-      <nav className="flex-1 flex flex-col items-center justify-center gap-3 w-full px-2 py-4">
-        {NAV_ITEMS.map((item) => {
-          const isActive = activeNav === item.id
-          const Icon = item.icon
-          return (
-            <div key={item.id} className="relative group w-full flex justify-center">
-              <button
-                onClick={() => onNavChange(item.id)}
-                className={`relative flex flex-col items-center justify-center w-16 h-16 min-w-16 min-h-16 flex-shrink-0 rounded-2xl transition-all duration-200 focus:outline-none cursor-pointer ${
-                  isActive
-                    ? 'liquid-glass-card text-[var(--color-accent)] border-[var(--color-accent)]/50 bg-white/[0.08]'
-                    : 'text-white/40 hover:text-white/90 hover:bg-white/[0.05]'
-                }`}
-                aria-label={item.label}
-              >
-                <Icon size={22} />
-                <span className="text-[10px] font-medium tracking-tight mt-1">
-                  {item.shortLabel}
-                </span>
-              </button>
-
-              {/* Flyout Tooltip */}
-              <div className="!absolute left-[84px] top-1/2 -translate-y-1/2 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-150 z-50 px-3 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap shadow-xl bg-black/90 border border-white/20 backdrop-blur-xl">
-                {item.label}
-              </div>
+            {/* Hovering, Vertically Draggable Frosted Apple Liquid Glass Lens Bubble */}
+            <div
+              role="slider"
+              aria-label="Drag up or down to switch pages"
+              aria-valuemin={1}
+              aria-valuemax={NAV_ITEMS.length}
+              aria-valuenow={previewIndex + 1}
+              data-testid="sidebar-liquid-bubble"
+              onPointerDown={handleBubblePointerDown}
+              onPointerMove={handleBubblePointerMove}
+              onPointerUp={finishDrag}
+              onPointerCancel={finishDrag}
+              className={`absolute left-0 right-0 z-20 touch-none cursor-grab active:cursor-grabbing ${
+                dragTop !== null
+                  ? 'scale-[1.06]'
+                  : 'transition-[top,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-[1.04]'
+              }`}
+              style={{
+                top: currentBubbleTop,
+                width: ITEM_SIZE,
+                height: ITEM_SIZE,
+              }}
+            >
+              <LiquidGlass
+                eager
+                radius={999}
+                scale={30}
+                aberration={12}
+                bevelDepth={11}
+                frost={0.22}
+                tint={0.14}
+                className="w-full h-full !border-white/50 !shadow-[0_14px_34px_rgba(0,0,0,0.58),inset_0_2px_1px_rgba(255,255,255,0.75),inset_0_-1.5px_2px_rgba(0,0,0,0.28)]"
+              />
             </div>
-          )
-        })}
-      </nav>
-
-      {/* Bottom Engine Telemetry */}
-      <div className="pb-6 flex flex-col items-center text-white/40 font-mono text-[11px] font-semibold">
-        v1.0
-      </div>
-    </aside>
+          </nav>
+        </LiquidGlass>
+      </aside>
+    </div>
   )
 }
+
+export default memo(Sidebar)

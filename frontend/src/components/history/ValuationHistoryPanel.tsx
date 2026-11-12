@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { memo, useMemo, useState, useEffect } from 'react'
 import {
   History,
   Trash2,
@@ -11,53 +11,22 @@ import {
   Filter,
 } from 'lucide-react'
 import { formatCurrency, formatPricePerSqft, formatConfidence } from '@/lib/formatters'
-import type { PropertyFormData, ValuationResult } from '@/types'
+import { LiquidGlass, LiquidGlassButton, LiquidGlassSelect } from '@/components/ui/liquid-glass'
+import {
+  saveValuationToHistory,
+  loadValuationHistory,
+  clearValuationHistory,
+  type ValuationHistoryEntry,
+} from '@/lib/historyStorage'
 
-export interface ValuationHistoryEntry {
-  id: string
-  timestamp: string
-  formData: PropertyFormData
-  result: ValuationResult
-}
-
-const STORAGE_KEY = 'nestor_valuation_history'
-
-export function saveValuationToHistory(
-  formData: PropertyFormData,
-  result: ValuationResult,
-): ValuationHistoryEntry[] {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY)
-    const existing: ValuationHistoryEntry[] = raw ? JSON.parse(raw) : []
-    const newEntry: ValuationHistoryEntry = {
-      id: `VAL-${Date.now()}`,
-      timestamp: new Date().toISOString(),
-      formData,
-      result,
-    }
-    const updated = [newEntry, ...existing].slice(0, 50) // keep last 50
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
-    return updated
-  } catch {
-    return []
-  }
-}
-
-export function loadValuationHistory(): ValuationHistoryEntry[] {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY)
-    return raw ? JSON.parse(raw) : []
-  } catch {
-    return []
-  }
-}
+export { saveValuationToHistory, loadValuationHistory, type ValuationHistoryEntry }
 
 interface ValuationHistoryPanelProps {
   onSelectEntry: (entry: ValuationHistoryEntry) => void
   onNewValuation: () => void
 }
 
-export default function ValuationHistoryPanel({
+function ValuationHistoryPanel({
   onSelectEntry,
   onNewValuation,
 }: ValuationHistoryPanelProps) {
@@ -71,7 +40,7 @@ export default function ValuationHistoryPanel({
 
   function handleClearHistory() {
     if (window.confirm('Are you sure you want to clear all valuation history records?')) {
-      localStorage.removeItem(STORAGE_KEY)
+      clearValuationHistory()
       setHistory([])
     }
   }
@@ -114,23 +83,38 @@ export default function ValuationHistoryPanel({
   }
 
   // Filter
-  const filtered = history.filter((item) => {
-    const matchesCity =
-      selectedCity === 'all' || item.formData.city.toLowerCase() === selectedCity.toLowerCase()
-    const matchesSearch =
-      searchQuery === '' ||
-      item.formData.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.formData.property_type.toLowerCase().includes(searchQuery.toLowerCase())
-    return matchesCity && matchesSearch
-  })
+  const filtered = useMemo(() => {
+    const queryLower = searchQuery.toLowerCase()
+    const cityLower = selectedCity.toLowerCase()
+    return history.filter((item) => {
+      const matchesCity =
+        selectedCity === 'all' || item.formData.city.toLowerCase() === cityLower
+      const matchesSearch =
+        queryLower === '' ||
+        item.formData.city.toLowerCase().includes(queryLower) ||
+        item.id.toLowerCase().includes(queryLower) ||
+        item.formData.property_type.toLowerCase().includes(queryLower)
+      return matchesCity && matchesSearch
+    })
+  }, [history, searchQuery, selectedCity])
 
-  const uniqueCities = Array.from(new Set(history.map((h) => h.formData.city)))
+  const uniqueCities = useMemo(
+    () => Array.from(new Set(history.map((h) => h.formData.city))),
+    [history],
+  )
 
   return (
-    <div className="space-y-6 pb-12">
+    <div className="space-y-6 pb-12 animate-panel-enter">
       {/* Top Controls Banner */}
-      <div className="liquid-glass-panel rounded-2xl p-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <LiquidGlass
+        radius={32}
+        scale={48}
+        aberration={14}
+        bevelDepth={30}
+        frost={0.36}
+        tint={0.06}
+        className="p-8 flex flex-col md:flex-row md:items-center justify-between gap-4"
+      >
         <div>
           <h2 className="text-xl sm:text-2xl font-bold font-heading text-white flex items-center gap-3">
             <History size={22} className="text-[var(--color-accent)]" />
@@ -144,35 +128,61 @@ export default function ValuationHistoryPanel({
         <div className="flex items-center gap-3">
           {history.length > 0 && (
             <>
-              <button
+              <LiquidGlassButton
                 onClick={handleExportCSV}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-semibold bg-white/10 text-white border border-white/15 hover:bg-white/20 transition-all cursor-pointer"
+                radius={999}
+                scale={40}
+                aberration={12}
+                bevelDepth={14}
+                frost={0.32}
+                tint={0.1}
+                glassClassName="px-4 py-2.5 text-xs font-semibold"
               >
                 <Download size={14} />
                 <span>Export CSV</span>
-              </button>
-              <button
+              </LiquidGlassButton>
+              <LiquidGlassButton
                 onClick={handleClearHistory}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-semibold bg-red-500/15 text-[var(--color-danger)] border border-red-500/25 hover:bg-red-500/25 transition-all cursor-pointer"
+                radius={999}
+                scale={40}
+                aberration={12}
+                bevelDepth={14}
+                frost={0.32}
+                tint={0.08}
+                glassClassName="px-4 py-2.5 text-xs font-semibold !bg-red-500/15 text-[var(--color-danger)] !border-red-500/30 hover:!border-red-400/60"
               >
                 <Trash2 size={14} />
                 <span>Clear All</span>
-              </button>
+              </LiquidGlassButton>
             </>
           )}
 
-          <button
+          <LiquidGlassButton
             onClick={onNewValuation}
-            className="solid-white-btn rounded-2xl px-5 py-2.5 text-xs sm:text-sm font-semibold gap-2 cursor-pointer"
+            radius={999}
+            scale={38}
+            aberration={12}
+            bevelDepth={14}
+            frost={0.44}
+            tint={0.2}
+            glassClassName="px-5 py-2.5 text-xs sm:text-sm font-semibold !border-white/50 text-white"
           >
             <Calculator size={15} />
             <span>New Valuation</span>
-          </button>
+          </LiquidGlassButton>
         </div>
-      </div>
+      </LiquidGlass>
 
       {/* Filter and Search Bar */}
-      <div className="liquid-glass-card rounded-2xl p-5 flex flex-col sm:flex-row items-center gap-4">
+      <LiquidGlass
+        radius={999}
+        scale={44}
+        aberration={13}
+        bevelDepth={26}
+        frost={0.36}
+        tint={0.055}
+        className="p-4 sm:px-5 flex flex-col sm:flex-row items-center gap-4"
+      >
         <div className="relative flex-1 w-full">
           <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" />
           <input
@@ -180,33 +190,38 @@ export default function ValuationHistoryPanel({
             placeholder="Search by ID, city, or property type..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-black/60 border border-white/15 rounded-2xl pl-11 pr-4 py-3 text-sm text-white placeholder-white/40 focus:outline-none focus:border-[var(--color-accent)]"
+            className="w-full bg-white/[0.06] border border-white/25 rounded-full pl-11 pr-4 py-3 text-sm text-white placeholder-white/40 focus:outline-none focus:border-white/55 backdrop-blur-md"
           />
         </div>
 
         {uniqueCities.length > 0 && (
-          <div className="flex items-center gap-2.5 self-start sm:self-auto">
-            <Filter size={15} className="text-white/40" />
-            <select
+          <div className="flex items-center gap-2.5 self-start sm:self-auto min-w-[180px]">
+            <Filter size={15} className="text-white/40 flex-shrink-0" />
+            <LiquidGlassSelect
+              ariaLabel="Filter by city"
               value={selectedCity}
-              onChange={(e) => setSelectedCity(e.target.value)}
-              className="bg-black/60 border border-white/15 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[var(--color-accent)]"
-            >
-              <option value="all">All Cities ({history.length})</option>
-              {uniqueCities.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </select>
+              onChange={(val) => setSelectedCity(val)}
+              options={[
+                { value: 'all', label: `All Cities (${history.length})` },
+                ...uniqueCities.map((c) => ({ value: c, label: c })),
+              ]}
+            />
           </div>
         )}
-      </div>
+      </LiquidGlass>
 
       {/* Table / Empty State */}
       {history.length === 0 ? (
-        <div className="liquid-glass-panel rounded-2xl p-14 text-center flex flex-col items-center justify-center">
-          <div className="p-4 rounded-2xl bg-white/[0.05] border border-white/20 text-[var(--color-accent)] mb-4">
+        <LiquidGlass
+          radius={32}
+          scale={52}
+          aberration={16}
+          bevelDepth={34}
+          frost={0.36}
+          tint={0.065}
+          className="p-14 text-center flex flex-col items-center justify-center"
+        >
+          <div className="p-4 rounded-full bg-white/[0.05] border border-white/20 text-[var(--color-accent)] mb-4">
             <History size={32} />
           </div>
           <h3 className="text-xl font-bold font-heading text-white">
@@ -216,20 +231,42 @@ export default function ValuationHistoryPanel({
             Run your first property valuation in the workspace. All estimations and comparative
             metrics are automatically persisted to this audit ledger.
           </p>
-          <button
+          <LiquidGlassButton
             onClick={onNewValuation}
-            className="solid-white-btn rounded-2xl px-6 py-3 text-sm font-semibold gap-2 cursor-pointer"
+            radius={999}
+            scale={40}
+            aberration={12}
+            bevelDepth={14}
+            frost={0.44}
+            tint={0.2}
+            glassClassName="px-6 py-3 text-sm font-semibold !border-white/50 text-white"
           >
             <span>Run First Valuation</span>
             <ArrowUpRight size={16} />
-          </button>
-        </div>
+          </LiquidGlassButton>
+        </LiquidGlass>
       ) : filtered.length === 0 ? (
-        <div className="liquid-glass-panel rounded-2xl p-10 text-center text-sm text-white/50">
+        <LiquidGlass
+          radius={32}
+          scale={44}
+          aberration={13}
+          bevelDepth={28}
+          frost={0.36}
+          tint={0.055}
+          className="p-10 text-center text-sm text-white/50"
+        >
           No records matching the filter criteria.
-        </div>
+        </LiquidGlass>
       ) : (
-        <div className="liquid-glass-panel rounded-2xl overflow-hidden">
+        <LiquidGlass
+          radius={32}
+          scale={48}
+          aberration={14}
+          bevelDepth={32}
+          frost={0.36}
+          tint={0.06}
+          className=""
+        >
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs sm:text-sm">
               <thead>
@@ -300,28 +337,36 @@ export default function ValuationHistoryPanel({
                     </td>
 
                     <td className="py-3.5 px-5 text-center">
-                      <span className="inline-block px-3 py-1 rounded-xl text-xs font-mono font-semibold bg-[rgba(39,215,174,0.12)] text-[var(--color-accent)] border border-[rgba(39,215,174,0.25)]">
+                      <span className="inline-block px-3 py-1 rounded-full text-xs font-mono font-semibold bg-[rgba(39,215,174,0.12)] text-[var(--color-accent)] border border-[rgba(39,215,174,0.25)]">
                         {formatConfidence(item.result.confidence)}
                       </span>
                     </td>
 
                     <td className="py-3.5 px-5 text-right">
-                      <button
+                      <LiquidGlassButton
                         onClick={() => onSelectEntry(item)}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-white/10 border border-white/20 text-white hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-all cursor-pointer"
+                        radius={999}
+                        scale={36}
+                        aberration={12}
+                        bevelDepth={12}
+                        frost={0.3}
+                        tint={0.1}
+                        glassClassName="px-3.5 py-1.5 text-xs font-semibold hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
                       >
                         <span>Inspect</span>
                         <ArrowUpRight size={13} />
-                      </button>
+                      </LiquidGlassButton>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-        </div>
+        </LiquidGlass>
       )}
     </div>
   )
 }
+
+export default memo(ValuationHistoryPanel)
 

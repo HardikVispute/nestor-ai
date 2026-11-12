@@ -45,10 +45,10 @@
 }
 
 :root {
-  /* Unified Geometry (Panels, Cards, Buttons, and Inputs share this exact radius) */
-  --ui-radius: 20px;
-  --ui-radius-sm: 16px;
-  --ui-radius-lg: 24px;
+  /* Unified Full-Rounded Geometry */
+  --ui-radius: 32px;
+  --ui-radius-sm: 24px;
+  --ui-radius-lg: 36px;
 
   /* Background layers - Pure Black Canvas */
   --color-bg: #000000;
@@ -192,25 +192,25 @@ ul, ol {
 /* Outlined Glass Cards (Identical Inner Radius) */
 .liquid-glass-card,
 .glass-card {
-  background: rgba(255, 255, 255, 0.025);
+  background: rgba(6, 10, 18, 0.34);
   backdrop-filter: blur(20px) saturate(160%);
   -webkit-backdrop-filter: blur(20px) saturate(160%);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: var(--ui-radius) !important;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.48), inset 0 -1px 0 rgba(255, 255, 255, 0.1);
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
 }
 
 .liquid-glass-card:hover,
 .glass-card-hover:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.28);
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.55);
-  transform: translateY(-1px);
+  background: rgba(12, 18, 30, 0.44);
+  border-color: rgba(255, 255, 255, 0.36);
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.56), inset 0 1.5px 0 rgba(255, 255, 255, 0.65), inset 0 -1px 0 rgba(255, 255, 255, 0.16);
+  transform: translateY(-2px);
 }
 
-/* Spacious Outlined Glass Buttons (Identical Radius to Panels) */
+/* Spacious Outlined Glass Buttons (Full Pill) */
 .liquid-glass-btn {
   background: rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(28px) saturate(180%);
@@ -218,7 +218,7 @@ ul, ol {
   border: 1px solid rgba(255, 255, 255, 0.25);
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.55);
   color: #FFFFFF;
-  border-radius: var(--ui-radius) !important;
+  border-radius: 9999px !important;
   padding: 16px 36px !important;
   font-size: 16px;
   font-weight: 600;
@@ -246,11 +246,11 @@ ul, ol {
   transform: translateY(0) scale(0.98);
 }
 
-/* Spacious Solid Buttons (Identical Radius to Panels) */
+/* Spacious Solid Buttons (Full Pill) */
 .solid-white-btn {
   background: #FFFFFF;
   color: #0A0A0A;
-  border-radius: var(--ui-radius) !important;
+  border-radius: 9999px !important;
   padding: 16px 36px !important;
   font-size: 16px;
   font-weight: 600;
@@ -283,7 +283,7 @@ ul, ol {
   border: 1px solid rgba(39, 215, 174, 0.45);
   box-shadow: 0 10px 40px rgba(39, 215, 174, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.55);
   color: #FFFFFF;
-  border-radius: var(--ui-radius) !important;
+  border-radius: 9999px !important;
   padding: 16px 36px !important;
   font-size: 16px;
   font-weight: 600;
@@ -306,7 +306,7 @@ ul, ol {
 
 /* Compact Glass Pill */
 .glass-pill {
-  border-radius: var(--ui-radius) !important;
+  border-radius: 9999px !important;
   padding: 8px 18px !important;
   font-size: 13px;
   display: inline-flex;
@@ -314,9 +314,58 @@ ul, ol {
   gap: 8px;
 }
 
+/* Subtle Entrance & Result Reveal Motion (Active in Full FX) */
+@keyframes nestorFadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-panel-enter {
+  animation: nestorFadeSlideUp 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-result-reveal {
+  animation: nestorFadeSlideUp 0.48s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Optional Explicit Performance Mode Overrides (only when user switches toggle) */
+.performance-mode .liquid-glass-panel,
+.performance-mode .glass-panel,
+.performance-mode .liquid-glass-card,
+.performance-mode .glass-card,
+.performance-mode .liquid-glass-btn,
+.performance-mode .accent-glass-btn {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: rgba(12, 16, 24, 0.85);
+}
+
+.performance-mode .liquid-glass-btn {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.performance-mode .animate-panel-enter,
+.performance-mode .animate-result-reveal {
+  animation: none !important;
+}
+
+.performance-mode .liquid-glass-card:hover,
+.performance-mode .glass-card-hover:hover,
+.performance-mode .liquid-glass-btn:hover,
+.performance-mode .solid-white-btn:hover,
+.performance-mode .accent-glass-btn:hover {
+  transform: none;
+}
+
 /* Inputs & Form Controls */
 input, select, textarea {
-  border-radius: var(--ui-radius) !important;
+  border-radius: 9999px !important;
   font-family: var(--font-body);
 }
 

@@ -4,7 +4,7 @@
 > **Framework**: FastAPI 0.162.2 / Starlette 1.10.0 / Uvicorn 0.54.0  
 > **Status**: **Phase 2 Complete — Live Model Serving Active**  
 > **Location**: `nestor-ai/backend/`  
-> **Last Verified**: 2026-11-10
+> **Last Verified**: 2026-11-12
 
 ---
 
@@ -13,21 +13,30 @@
 ```
 backend/
 ├── app/
-│   ├── __init__.py           # Package marker
-│   ├── main.py               # FastAPI app, CORS, lifespan hooks
-│   ├── schemas.py            # Pydantic v2 schemas and validators
+│   ├── __init__.py               # Package marker
+│   ├── main.py                   # FastAPI app, CORS, lifespan hooks
+│   ├── schemas.py                # Pydantic v2 schemas and validators
 │   ├── routers/
 │   │   ├── __init__.py
-│   │   ├── health.py         # GET /api/health endpoint
-│   │   ├── meta.py           # GET /api/meta/locations endpoint
-│   │   └── valuation.py      # POST /api/valuation endpoint
+│   │   ├── health.py             # GET /api/health endpoint
+│   │   ├── market.py             # GET /api/market/trends endpoint
+│   │   ├── meta.py               # GET /api/meta/locations endpoint
+│   │   └── valuation.py          # POST /api/valuation endpoint
 │   └── services/
 │       ├── __init__.py
-│       └── model_service.py  # Model loader, inference engine & comparable matcher
-├── test_api.py               # Route and schema verification test suite
-├── test_prediction.py        # Comprehensive 10-case model prediction test suite
-├── requirements.txt          # Python dependency specifications
-└── .env.example              # Environment variables template
+│       └── model_service.py      # Model loader, inference engine & comparable matcher
+├── artifacts/
+│   ├── model.joblib              # Trained champion HistGradientBoosting pipeline (271 KB)
+│   └── model_metadata.json       # Training & evaluation metadata (2.2 KB)
+├── data/
+│   └── cleaned_properties.csv    # Cleaned 65,000-row dataset for comparables & trends (8.05 MB)
+├── test_api.py                   # Route and schema verification test suite
+├── test_cors_verification.py     # Exhaustive 20-case CORS & endpoint verification suite
+├── test_prediction.py            # Comprehensive 10-case model prediction test suite
+├── .python-version               # Pinned Python 3.12 runtime for Vercel
+├── .vercelignore                 # Excludes .venv/, __pycache__/, .env*, and test_*.py
+├── requirements.txt              # Pinned runtime Python dependencies
+└── .env.example                  # Environment variables template
 ```
 
 ---
@@ -227,3 +236,35 @@ Set-Location "c:\PC\Hardik\Projects\Nestor AI\nestor-ai\backend"
 & ".\.venv\Scripts\python.exe" test_cors_verification.py
 ```
 All backend test cases execute and pass cleanly.
+
+---
+
+## 5. Vercel Multi-Service Deployment Architecture
+
+NESTOR AI deploys as a single Vercel multi-service project configured by the repository-root [`vercel.json`](file:///c:/PC/Hardik/Projects/Nestor%20AI/nestor-ai/vercel.json).
+
+### 5.1 Multi-Service Definition & Routing
+- **`frontend` service**: `root: "frontend/"`, `framework: "nextjs"`. Serves all non-API UI routes via rewrite `/(.*) -> { "service": "frontend" }`.
+- **`backend` service**: `root: "backend/"`, `framework: "fastapi"`, `entrypoint: "app.main:app"`. Serves all API endpoints via rewrite `/api/(.*) -> { "service": "backend" }`.
+- Vercel Services rewrites forward the original `/api/...` path unchanged to FastAPI, matching the existing `/api`, `/api/meta`, and `/api/market` router prefixes in `backend/app/main.py`.
+
+### 5.2 API Configuration & Same-Origin Behavior
+- In [`frontend/src/lib/api.ts`](file:///c:/PC/Hardik/Projects/Nestor%20AI/nestor-ai/frontend/src/lib/api.ts), `API_BASE` reads `process.env.NEXT_PUBLIC_API_URL ?? ""` and strips any trailing `/` or `/api` suffix to prevent duplicate `/api/api/...` paths.
+- **Production (Vercel)**: Leave `NEXT_PUBLIC_API_URL` unset so the browser issues same-origin relative requests (`/api/health`, `/api/meta/locations`, `/api/market/trends`, `/api/valuation`) without requiring cross-origin CORS.
+- **Local Development**: `frontend/.env.local` sets `NEXT_PUBLIC_API_URL=http://127.0.0.1:8001` (ignored by Git via `.env*`), and `ALLOWED_ORIGINS` in `backend/app/main.py` preserves `localhost` and `127.0.0.1` on ports `3000` and `3001`.
+
+### 5.3 Backend Runtime Assets & Bundle Budget
+Because Vercel isolates the `backend` service to `backend/`, all runtime assets required for inference, comparable retrieval, and market trends reside inside `backend/`:
+- `backend/artifacts/model.joblib` (277,953 bytes / ~271 KB)
+- `backend/artifacts/model_metadata.json` (2,267 bytes / ~2.2 KB)
+- `backend/data/cleaned_properties.csv` (8,439,489 bytes / ~8.05 MB)
+
+`backend/app/services/model_service.py` and `backend/app/routers/market.py` resolve assets inside `BACKEND_ROOT` (`backend/`) first, falling back to repo-root `artifacts/` and `data/processed/` only if absent locally.
+- `backend/.vercelignore` excludes `.venv/`, `__pycache__/`, `.env*`, and `test_*.py`.
+- `backend/requirements.txt` pins `scikit-learn==1.9.1`, `numpy==2.5.4`, `pandas==3.1.1`, `scipy==1.18.1`, and `joblib==1.6.0` to guarantee exact pickle compatibility with `model.joblib`, and drops unused packages (`httpx`, `python-dotenv`, `uvicorn[standard]` extras).
+- Measured uncompressed backend footprint: ~8.34 MB application + runtime assets + ~311.94 MB Python runtime packages = **~320.28 MB** total (within Vercel's 500 MB Python function limit).
+
+### 5.4 Environment Variables
+- **Frontend (`frontend/.env.local`, local dev only)**: `NEXT_PUBLIC_API_URL=http://127.0.0.1:8001` (do **not** set in Vercel production so requests stay same-origin).
+- **Backend (optional)**: `CORS_ORIGINS` (comma-separated origin override if a separate external frontend origin is ever needed).
+- No API keys, database credentials, or secrets are stored in `NEXT_PUBLIC_*` variables or committed to Git.

@@ -29,7 +29,7 @@ const TEXT_COLOR: Record<BadgeLevel, string> = {
 export default function StatusBadge({ level, label, className = '' }: StatusBadgeProps) {
   return (
     <span
-      className={`inline-flex items-center gap-1.5 text-xs font-mono font-semibold px-2.5 py-1 rounded-xl ${className}`}
+      className={`inline-flex items-center gap-1.5 text-xs font-mono font-semibold px-3 py-1 rounded-full ${className}`}
       style={{
         backgroundColor: 'rgba(255, 255, 255, 0.05)',
         border: '1px solid rgba(255, 255, 255, 0.12)',

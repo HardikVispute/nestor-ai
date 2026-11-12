@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { memo, useState } from 'react'
 import {
   Activity,
   Database,
@@ -12,6 +12,8 @@ import {
   BarChart3,
   Scale,
   Sparkles,
+  Zap,
+  PlusCircle,
 } from 'lucide-react'
 import {
   ResponsiveContainer,
@@ -26,7 +28,8 @@ import {
   Cell,
 } from 'recharts'
 import type { HealthResponse, ModelStatus } from '@/types'
-import { LiquidGlass } from '@/components/ui/liquid-glass'
+import { LiquidGlass, LiquidGlassButton } from '@/components/ui/liquid-glass'
+import { usePerformanceMode } from '@/contexts/PerformanceContext'
 
 interface OverviewPanelProps {
   health: HealthResponse | null
@@ -55,28 +58,149 @@ const RESIDUAL_TIERS = [
   { label: 'Within ±50% Actual Price', percentage: 86.4, count: '11,232 listings' },
 ]
 
-export default function OverviewPanel({
+function OverviewPanel({
   health,
   modelStatus,
   onNavigateToValuation,
 }: OverviewPanelProps) {
   const [activeMetric, setActiveMetric] = useState<'rate' | 'listings'>('rate')
+  const { mode, toggleMode, isLightweight } = usePerformanceMode()
   const isReady = modelStatus === 'ready' && health?.model_ready
 
   return (
-    <div className="space-y-8 pb-12">
+    <div className="space-y-8 pb-12 animate-panel-enter">
+      {/* Overview-Only Page Header */}
+      <LiquidGlass
+        radius={999}
+        scale={42}
+        aberration={14}
+        bevelDepth={22}
+        frost={0.36}
+        tint={0.075}
+        className="px-7 py-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4"
+      >
+        <div className="min-w-0">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-mono font-semibold uppercase tracking-wider text-[var(--color-accent)]">
+              NESTOR AI
+            </span>
+            <span className="text-xs text-white/25">/</span>
+            <span className="text-xs font-mono uppercase tracking-wider text-white/55">
+              OVERVIEW
+            </span>
+          </div>
+          <h2 className="text-xl sm:text-2xl font-bold font-heading tracking-tight text-white mt-0.5">
+            Command Center &amp; Market Telemetry
+          </h2>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-3 flex-shrink-0">
+          <LiquidGlassButton
+            data-testid="performance-mode-toggle"
+            onClick={toggleMode}
+            radius={999}
+            scale={36}
+            aberration={12}
+            bevelDepth={12}
+            frost={0.38}
+            tint={isLightweight ? 0.1 : 0.12}
+            title={
+              mode === 'performance'
+                ? 'Performance Mode active — click for Full FX Experience'
+                : 'Full FX Experience active — click for Performance Mode'
+            }
+            glassClassName="px-4 py-2.5 text-xs font-mono font-medium whitespace-nowrap text-white/90"
+          >
+            {isLightweight ? (
+              <Zap size={14} className="flex-shrink-0" />
+            ) : (
+              <Sparkles size={14} className="text-[var(--color-accent)] flex-shrink-0" />
+            )}
+            <span>{mode === 'performance' ? 'Performance' : 'Full FX'}</span>
+          </LiquidGlassButton>
+
+          <LiquidGlass
+            radius={999}
+            scale={34}
+            aberration={10}
+            bevelDepth={12}
+            frost={0.36}
+            tint={0.08}
+            contentClassName="flex items-center gap-2.5 px-4 py-2.5 text-xs font-mono font-medium whitespace-nowrap"
+          >
+            <span className="relative flex h-2.5 w-2.5 flex-shrink-0">
+              {!isLightweight && (isReady || modelStatus === 'loading') && (
+                <span
+                  className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
+                  style={{
+                    backgroundColor: isReady
+                      ? 'var(--color-accent)'
+                      : 'var(--color-warning)',
+                  }}
+                />
+              )}
+              <span
+                className="relative inline-flex rounded-full h-2.5 w-2.5"
+                style={{
+                  backgroundColor: isReady
+                    ? 'var(--color-accent)'
+                    : modelStatus === 'loading'
+                      ? 'var(--color-warning)'
+                      : 'var(--color-danger)',
+                }}
+              />
+            </span>
+            <span className="text-white/90">
+              {isReady
+                ? 'Model Active · HistGradientBoosting'
+                : modelStatus === 'loading'
+                  ? 'Connecting to Engine...'
+                  : 'Model Offline'}
+            </span>
+          </LiquidGlass>
+
+          <LiquidGlassButton
+            onClick={onNavigateToValuation}
+            radius={999}
+            scale={38}
+            aberration={12}
+            bevelDepth={14}
+            frost={0.44}
+            tint={0.2}
+            glassClassName="px-5 py-2.5 text-xs sm:text-sm font-semibold whitespace-nowrap !border-white/50 text-white"
+          >
+            <PlusCircle size={15} />
+            <span>New Valuation</span>
+          </LiquidGlassButton>
+        </div>
+      </LiquidGlass>
+
       {/* 00. Institutional Command Hero Header */}
-      <div className="relative liquid-glass-panel rounded-2xl p-10 sm:p-14">
-        {/* Subtle radial glow */}
-        <div className="absolute top-0 right-1/4 -translate-y-1/2 w-96 h-96 bg-[var(--color-accent)] opacity-[0.08] rounded-full blur-3xl pointer-events-none" />
-        
+      <LiquidGlass
+        radius={32}
+        scale={54}
+        aberration={16}
+        bevelDepth={36}
+        frost={0.36}
+        tint={0.07}
+        className="p-10 sm:p-14"
+      >
         <div className="relative z-10 max-w-4xl space-y-6">
-          <div className="inline-flex items-center gap-3 px-4 py-2 rounded-2xl liquid-glass-card text-xs sm:text-sm font-mono text-white/80 border border-white/15">
+          <LiquidGlass
+            radius={999}
+            scale={34}
+            aberration={12}
+            bevelDepth={12}
+            frost={0.32}
+            tint={0.075}
+            className="inline-flex"
+            contentClassName="inline-flex items-center gap-3 px-4 py-2 text-xs sm:text-sm font-mono text-white/80"
+          >
             <span className="w-2.5 h-2.5 rounded-full bg-[var(--color-accent)] shadow-[0_0_10px_var(--color-accent)]" />
             <span className="font-semibold text-white tracking-wide">NESTOR VALUATION CORE</span>
             <span className="text-white/30">|</span>
             <span className="text-white/70">65,000 Verified Listings · 20 Metros</span>
-          </div>
+          </LiquidGlass>
 
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-heading font-bold text-white tracking-tight leading-[1.05] [text-shadow:0_2px_16px_rgba(0,0,0,0.4)]">
             Precision Property Valuation Intelligence, Calibrated for Capital.
@@ -88,20 +212,32 @@ export default function OverviewPanel({
           </p>
 
           <div className="pt-4 flex flex-wrap items-center gap-6">
-            <button
+            <LiquidGlassButton
               onClick={onNavigateToValuation}
-              className="liquid-glass-btn rounded-2xl cursor-pointer group"
+              radius={999}
+              scale={46}
+              aberration={14}
+              bevelDepth={16}
+              frost={0.32}
+              tint={0.11}
+              glassClassName="px-9 py-4 text-base font-semibold tracking-[-0.01em]"
             >
               <span>Launch Valuation Workspace</span>
               <ArrowUpRight className="h-5 w-5 text-[var(--color-accent)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-            </button>
-            <button
+            </LiquidGlassButton>
+            <LiquidGlassButton
               onClick={onNavigateToValuation}
-              className="solid-white-btn rounded-2xl cursor-pointer"
+              radius={999}
+              scale={46}
+              aberration={14}
+              bevelDepth={16}
+              frost={0.44}
+              tint={0.2}
+              glassClassName="px-9 py-4 text-base font-semibold tracking-[-0.01em] !border-white/50 text-white"
             >
               <span>Instant Estimation</span>
               <ArrowUpRight className="h-5 w-5" />
-            </button>
+            </LiquidGlassButton>
             <div className="flex items-center gap-4 text-xs font-mono text-white/60 pl-2">
               <span className="text-[var(--color-accent)] font-semibold">Holdout MAPE: 24.36%</span>
               <span>·</span>
@@ -109,11 +245,17 @@ export default function OverviewPanel({
             </div>
           </div>
         </div>
-      </div>
+      </LiquidGlass>
 
       {/* 01. Continuous 4-Segment KPI Strip */}
-      <div
-        className="liquid-glass-panel rounded-2xl overflow-hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-white/10"
+      <LiquidGlass
+        radius={32}
+        scale={48}
+        aberration={14}
+        bevelDepth={32}
+        frost={0.36}
+        tint={0.06}
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-white/10"
       >
         {/* Metric 1: Cleaned Listings */}
         <div className="p-7 sm:p-8 flex flex-col justify-between hover:bg-[rgba(255,255,255,0.015)] transition-colors">
@@ -196,10 +338,12 @@ export default function OverviewPanel({
           <div className="mt-5">
             <div className="flex items-center gap-2.5">
               <span className="relative flex h-3 w-3">
-                <span
-                  className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
-                  style={{ backgroundColor: isReady ? 'var(--color-accent)' : 'var(--color-danger)' }}
-                />
+                {!isLightweight && (
+                  <span
+                    className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
+                    style={{ backgroundColor: isReady ? 'var(--color-accent)' : 'var(--color-danger)' }}
+                  />
+                )}
                 <span
                   className="relative inline-flex rounded-full h-3 w-3"
                   style={{ backgroundColor: isReady ? 'var(--color-accent)' : 'var(--color-danger)' }}
@@ -214,12 +358,20 @@ export default function OverviewPanel({
             </p>
           </div>
         </div>
-      </div>
+      </LiquidGlass>
 
       {/* 02. Main Analytics Split */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Left Column (7 cols): Property Market Analytics */}
-        <div className="lg:col-span-7 liquid-glass-panel rounded-2xl p-8 sm:p-9 flex flex-col justify-between">
+        <LiquidGlass
+          radius={32}
+          scale={48}
+          aberration={14}
+          bevelDepth={32}
+          frost={0.36}
+          tint={0.06}
+          className="lg:col-span-7 p-8 sm:p-9 flex flex-col justify-between"
+        >
           <div>
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-5 border-b border-white/10">
               <div>
@@ -233,28 +385,49 @@ export default function OverviewPanel({
               </div>
 
               {/* Metric Toggle */}
-              <div className="flex items-center gap-1.5 rounded-2xl p-1.5 liquid-glass-card border border-white/15 self-start sm:self-auto">
-                <button
+              <LiquidGlass
+                radius={999}
+                scale={34}
+                aberration={10}
+                bevelDepth={12}
+                frost={0.34}
+                tint={0.075}
+                className="self-start sm:self-auto"
+                contentClassName="flex items-center gap-2 p-1.5"
+              >
+                <LiquidGlassButton
                   onClick={() => setActiveMetric('rate')}
-                  className={`px-4 py-1.5 text-xs font-semibold rounded-xl transition-all cursor-pointer ${
+                  radius={999}
+                  scale={30}
+                  aberration={10}
+                  bevelDepth={10}
+                  frost={0.4}
+                  tint={activeMetric === 'rate' ? 0.22 : 0.08}
+                  glassClassName={`px-4 py-1.5 text-xs font-semibold ${
                     activeMetric === 'rate'
-                      ? 'bg-[var(--color-accent)] text-neutral-900 shadow-md'
-                      : 'text-white/60 hover:text-white'
+                      ? '!border-white/55 text-white'
+                      : 'text-white/65 hover:text-white !border-white/15'
                   }`}
                 >
                   Rate (₹/sq.ft.)
-                </button>
-                <button
+                </LiquidGlassButton>
+                <LiquidGlassButton
                   onClick={() => setActiveMetric('listings')}
-                  className={`px-4 py-1.5 text-xs font-semibold rounded-xl transition-all cursor-pointer ${
+                  radius={999}
+                  scale={30}
+                  aberration={10}
+                  bevelDepth={10}
+                  frost={0.4}
+                  tint={activeMetric === 'listings' ? 0.22 : 0.08}
+                  glassClassName={`px-4 py-1.5 text-xs font-semibold ${
                     activeMetric === 'listings'
-                      ? 'bg-[var(--color-accent)] text-neutral-900 shadow-md'
-                      : 'text-white/60 hover:text-white'
+                      ? '!border-white/55 text-white'
+                      : 'text-white/65 hover:text-white !border-white/15'
                   }`}
                 >
                   Listings Volume
-                </button>
-              </div>
+                </LiquidGlassButton>
+              </LiquidGlass>
             </div>
 
             {/* Recharts Chart - Scaled to h-80 sm:h-96 */}
@@ -321,7 +494,7 @@ export default function OverviewPanel({
                       strokeWidth={2.5}
                       fillOpacity={1}
                       fill="url(#emeraldGradient)"
-                      isAnimationActive={false}
+                      isAnimationActive={!isLightweight}
                     />
                   </AreaChart>
                 ) : (
@@ -362,7 +535,7 @@ export default function OverviewPanel({
                         return null
                       }}
                     />
-                    <Bar dataKey="listings" fill="#79A9F5" radius={[6, 6, 0, 0]} isAnimationActive={false}>
+                    <Bar dataKey="listings" fill="#79A9F5" radius={[6, 6, 0, 0]} isAnimationActive={!isLightweight}>
                       {CITY_RATES.map((_, index) => (
                         <Cell
                           key={`cell-${index}`}
@@ -381,10 +554,18 @@ export default function OverviewPanel({
             <span>Derived from 65,000 verified listings across 20 metro clusters</span>
             <span className="font-mono text-[var(--color-accent)] font-semibold">Live Telemetry Active</span>
           </div>
-        </div>
+        </LiquidGlass>
 
         {/* Right Column (5 cols): Valuation Intelligence & Model Telemetry */}
-        <div className="lg:col-span-5 liquid-glass-panel rounded-2xl p-8 sm:p-9 flex flex-col justify-between">
+        <LiquidGlass
+          radius={32}
+          scale={48}
+          aberration={14}
+          bevelDepth={32}
+          frost={0.36}
+          tint={0.06}
+          className="lg:col-span-5 p-8 sm:p-9 flex flex-col justify-between"
+        >
           <div>
             <div className="flex items-center justify-between pb-5 border-b border-white/10">
               <div>
@@ -396,7 +577,7 @@ export default function OverviewPanel({
                   Champion Model Specifications & Guardrails
                 </p>
               </div>
-              <span className="px-3 py-1 rounded-xl text-xs font-mono font-semibold bg-[rgba(39,215,174,0.12)] text-[var(--color-accent)] border border-[rgba(39,215,174,0.25)]">
+              <span className="px-3.5 py-1 rounded-full text-xs font-mono font-semibold bg-[rgba(39,215,174,0.12)] text-[var(--color-accent)] border border-[rgba(39,215,174,0.25)]">
                 CHAMPION v0.2
               </span>
             </div>
@@ -411,7 +592,7 @@ export default function OverviewPanel({
                     HistGradientBoostingRegressor
                   </div>
                 </div>
-                <span className="text-xs font-mono px-3 py-1 rounded-xl bg-white/10 text-white/80">
+                <span className="text-xs font-mono px-3.5 py-1 rounded-full bg-white/10 text-white/80">
                   Log1p Transformed
                 </span>
               </div>
@@ -454,7 +635,7 @@ export default function OverviewPanel({
                     Price Field Excluded
                   </div>
                 </div>
-                <span className="text-xs font-mono px-2.5 py-1 rounded-xl bg-[rgba(39,215,174,0.12)] text-[var(--color-accent)]">
+                <span className="text-xs font-mono px-3 py-1 rounded-full bg-[rgba(39,215,174,0.12)] text-[var(--color-accent)]">
                   Enforced
                 </span>
               </div>
@@ -462,21 +643,36 @@ export default function OverviewPanel({
           </div>
 
           <div className="pt-6 mt-6 border-t border-white/10">
-            <button
+            <LiquidGlassButton
               onClick={onNavigateToValuation}
-              className="w-full liquid-glass-btn rounded-2xl py-4 px-6 text-sm sm:text-base font-semibold gap-2.5 cursor-pointer"
+              radius={999}
+              scale={46}
+              aberration={14}
+              bevelDepth={16}
+              frost={0.32}
+              tint={0.11}
+              className="w-full"
+              glassClassName="py-4 px-6 text-sm sm:text-base font-semibold"
             >
               <span>Launch Valuation Workspace</span>
-              <ArrowUpRight size={18} className="text-[var(--color-accent)]" />
-            </button>
+              <ArrowUpRight size={18} className="text-[var(--color-accent)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+            </LiquidGlassButton>
           </div>
-        </div>
+        </LiquidGlass>
       </div>
 
       {/* 03. Lower Panels: Market Coverage & Error Residual Breakdown */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Lower Left: Market Coverage by Cluster */}
-        <div className="liquid-glass-panel rounded-2xl p-8 sm:p-9">
+        <LiquidGlass
+          radius={32}
+          scale={48}
+          aberration={14}
+          bevelDepth={32}
+          frost={0.36}
+          tint={0.06}
+          className="p-8 sm:p-9"
+        >
           <div className="flex items-center justify-between pb-5 border-b border-white/10">
             <div>
               <h3 className="text-base sm:text-lg font-bold font-heading text-[var(--color-text-primary)]">
@@ -518,10 +714,18 @@ export default function OverviewPanel({
               </div>
             ))}
           </div>
-        </div>
+        </LiquidGlass>
 
         {/* Lower Right: Error & Residual Dispersion Profile */}
-        <div className="liquid-glass-panel rounded-2xl p-8 sm:p-9">
+        <LiquidGlass
+          radius={32}
+          scale={48}
+          aberration={14}
+          bevelDepth={32}
+          frost={0.36}
+          tint={0.06}
+          className="p-8 sm:p-9"
+        >
           <div className="flex items-center justify-between pb-5 border-b border-white/10">
             <div>
               <h3 className="text-base sm:text-lg font-bold font-heading text-[var(--color-text-primary)]">
@@ -571,8 +775,10 @@ export default function OverviewPanel({
               Statistically calibrated 80% empirical intervals enabled
             </span>
           </div>
-        </div>
+        </LiquidGlass>
       </div>
     </div>
   )
 }
+
+export default memo(OverviewPanel)

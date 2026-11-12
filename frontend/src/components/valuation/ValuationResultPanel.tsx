@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { memo, useMemo } from 'react'
 import {
   AlertTriangle,
   ShieldCheck,
@@ -24,6 +24,8 @@ import {
 } from 'recharts'
 import { formatCurrency, formatPricePerSqft, formatConfidence, formatArea } from '@/lib/formatters'
 import StatusBadge from '@/components/shared/StatusBadge'
+import { LiquidGlass } from '@/components/ui/liquid-glass'
+import { usePerformanceMode } from '@/contexts/PerformanceContext'
 import type { ValuationResult } from '@/types'
 
 interface ValuationResultPanelProps {
@@ -56,11 +58,19 @@ function SkeletonResults() {
   )
 }
 
-export default function ValuationResultPanel({
+function ValuationResultPanel({
   result,
   isLoading,
   error,
 }: ValuationResultPanelProps) {
+  const { isLightweight } = usePerformanceMode()
+  const sortedFactors = useMemo(() => {
+    if (!result?.valuation_factors) return []
+    return [...result.valuation_factors]
+      .sort((a, b) => Math.abs(b.impact) - Math.abs(a.impact))
+      .slice(0, 5)
+  }, [result])
+
   // Loading State
   if (isLoading) {
     return (
@@ -104,8 +114,16 @@ export default function ValuationResultPanel({
   // Empty State
   if (!result) {
     return (
-      <div className="liquid-glass-panel rounded-2xl p-12 flex flex-col items-center justify-center text-center h-[560px]">
-        <div className="p-5 rounded-2xl bg-white/[0.05] border border-white/20 text-[var(--color-accent)] mb-4 shadow-[0_8px_30px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.4)]">
+      <LiquidGlass
+        radius={32}
+        scale={52}
+        aberration={16}
+        bevelDepth={34}
+        frost={0.36}
+        tint={0.065}
+        className="p-12 flex flex-col items-center justify-center text-center h-[560px]"
+      >
+        <div className="p-5 rounded-full bg-white/[0.05] border border-white/20 text-[var(--color-accent)] mb-4 shadow-[0_8px_30px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.4)]">
           <Building2 size={36} />
         </div>
         <h3 className="text-2xl sm:text-3xl font-bold font-heading text-white">
@@ -117,14 +135,14 @@ export default function ValuationResultPanel({
           compute asking value, calibrated intervals, and nearest comparable properties.
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3 text-xs sm:text-sm text-white/70 font-mono">
-          <span className="flex items-center gap-2 px-4 py-2 rounded-2xl liquid-glass-card">
+          <span className="flex items-center gap-2 px-4 py-2 rounded-full liquid-glass-card">
             <CheckCircle2 size={15} className="text-[var(--color-accent)]" /> 65,000 Verified Listings
           </span>
-          <span className="flex items-center gap-2 px-4 py-2 rounded-2xl liquid-glass-card">
+          <span className="flex items-center gap-2 px-4 py-2 rounded-full liquid-glass-card">
             <ShieldCheck size={15} className="text-[var(--color-accent-blue)]" /> 80% Calibrated Bounds
           </span>
         </div>
-      </div>
+      </LiquidGlass>
     )
   }
 
@@ -132,14 +150,18 @@ export default function ValuationResultPanel({
   const range = upper - lower
   const valueFraction = range > 0 ? (result.estimated_price - lower) / range : 0.5
 
-  const sortedFactors = [...result.valuation_factors]
-    .sort((a, b) => Math.abs(b.impact) - Math.abs(a.impact))
-    .slice(0, 5)
-
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-result-reveal">
       {/* 01. Hero Valuation Card */}
-      <div className="liquid-glass-panel rounded-2xl p-8 sm:p-9 relative overflow-hidden">
+      <LiquidGlass
+        radius={32}
+        scale={52}
+        aberration={16}
+        bevelDepth={34}
+        frost={0.36}
+        tint={0.065}
+        className="p-8 sm:p-9"
+      >
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-5 border-b border-white/10">
           <div>
             <span className="text-xs sm:text-sm font-mono font-medium uppercase tracking-wider text-white/50">
@@ -151,7 +173,7 @@ export default function ValuationResultPanel({
           </div>
 
           <div className="flex sm:flex-col items-end gap-2">
-            <span className="px-4 py-2 rounded-2xl text-xs sm:text-sm font-mono font-bold bg-[rgba(39,215,174,0.12)] text-[var(--color-accent)] border border-[rgba(39,215,174,0.35)] shadow-[inset_0_1px_0_rgba(255,255,255,0.4)]">
+            <span className="px-4 py-2 rounded-full text-xs sm:text-sm font-mono font-bold bg-[rgba(39,215,174,0.12)] text-[var(--color-accent)] border border-[rgba(39,215,174,0.35)] shadow-[inset_0_1px_0_rgba(255,255,255,0.4)]">
               {formatConfidence(result.confidence)} Confidence
             </span>
             <span className="text-xs text-white/50 font-mono">
@@ -180,10 +202,18 @@ export default function ValuationResultPanel({
             </div>
           </div>
         </div>
-      </div>
+      </LiquidGlass>
 
       {/* 02. Calibrated 80% Valuation Range */}
-      <div className="liquid-glass-panel rounded-2xl p-8 space-y-4">
+      <LiquidGlass
+        radius={32}
+        scale={48}
+        aberration={14}
+        bevelDepth={30}
+        frost={0.36}
+        tint={0.06}
+        className="p-8 space-y-4"
+      >
         <div className="flex items-center justify-between">
           <span className="text-sm sm:text-base font-bold uppercase tracking-wider text-white flex items-center gap-2">
             <ShieldCheck size={18} className="text-[var(--color-accent)]" />
@@ -234,11 +264,19 @@ export default function ValuationResultPanel({
         <p className="text-xs text-white/50 text-center leading-normal">
           Empirical 80% prediction interval calibrated against 13,000 test holdout properties.
         </p>
-      </div>
+      </LiquidGlass>
 
       {/* 03. Key Valuation Factors */}
       {sortedFactors.length > 0 && (
-        <div className="liquid-glass-panel rounded-2xl p-7 space-y-4">
+        <LiquidGlass
+          radius={32}
+          scale={48}
+          aberration={14}
+          bevelDepth={30}
+          frost={0.36}
+          tint={0.06}
+          className="p-7 space-y-4"
+        >
           <div className="flex items-center justify-between pb-4 border-b border-white/10">
             <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-white flex items-center gap-2">
               <TrendingUp size={16} className="text-[var(--color-accent-blue)]" />
@@ -287,7 +325,7 @@ export default function ValuationResultPanel({
                     return null
                   }}
                 />
-                <Bar dataKey="impact" radius={[0, 4, 4, 0]} isAnimationActive={false}>
+                <Bar dataKey="impact" radius={[0, 4, 4, 0]} isAnimationActive={!isLightweight}>
                   {sortedFactors.map((entry, index) => (
                     <Cell
                       key={`factor-${index}`}
@@ -298,12 +336,20 @@ export default function ValuationResultPanel({
               </BarChart>
             </ResponsiveContainer>
           </div>
-        </div>
+        </LiquidGlass>
       )}
 
       {/* 04. Nearest Comparable Properties Table */}
       {result.comparable_properties.length > 0 && (
-        <div className="liquid-glass-panel rounded-2xl p-7 space-y-4">
+        <LiquidGlass
+          radius={32}
+          scale={48}
+          aberration={14}
+          bevelDepth={30}
+          frost={0.36}
+          tint={0.06}
+          className="p-7 space-y-4"
+        >
           <div className="flex items-center justify-between pb-4 border-b border-white/10">
             <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-white flex items-center gap-2">
               <MapPin size={16} className="text-[var(--color-accent)]" />
@@ -347,7 +393,7 @@ export default function ValuationResultPanel({
                         {formatPricePerSqft(comp.price_per_sqft)}
                       </td>
                       <td className="py-3 text-right">
-                        <span className="inline-block px-2.5 py-1 rounded-xl text-xs font-mono font-semibold bg-[rgba(39,215,174,0.12)] text-[var(--color-accent)] border border-[rgba(39,215,174,0.25)]">
+                        <span className="inline-block px-3 py-1 rounded-full text-xs font-mono font-semibold bg-[rgba(39,215,174,0.12)] text-[var(--color-accent)] border border-[rgba(39,215,174,0.25)]">
                           {matchPct}%
                         </span>
                       </td>
@@ -357,12 +403,20 @@ export default function ValuationResultPanel({
               </tbody>
             </table>
           </div>
-        </div>
+        </LiquidGlass>
       )}
 
       {/* 05. Risk & Anomaly Assessment */}
       {result.risk_indicators.length > 0 && (
-        <div className="liquid-glass-panel rounded-2xl p-7 space-y-4">
+        <LiquidGlass
+          radius={32}
+          scale={48}
+          aberration={14}
+          bevelDepth={30}
+          frost={0.36}
+          tint={0.06}
+          className="p-7 space-y-4"
+        >
           <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-white flex items-center gap-2">
             <AlertTriangle size={16} className="text-[var(--color-warning)]" />
             Risk & Anomaly Audit
@@ -386,8 +440,10 @@ export default function ValuationResultPanel({
               </div>
             ))}
           </div>
-        </div>
+        </LiquidGlass>
       )}
     </div>
   )
 }
+
+export default memo(ValuationResultPanel)

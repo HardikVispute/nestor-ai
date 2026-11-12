@@ -9,8 +9,11 @@ import numpy as np
 
 router = APIRouter(tags=["Market Intelligence"])
 
+BACKEND_ROOT = Path(__file__).resolve().parents[2]  # nestor-ai/backend/
 PROJECT_ROOT = Path(__file__).resolve().parents[3]  # nestor-ai/
-DATASET_PATH = PROJECT_ROOT / "data" / "processed" / "cleaned_properties.csv"
+_PRIMARY_DATASET_PATH = BACKEND_ROOT / "data" / "cleaned_properties.csv"
+_FALLBACK_DATASET_PATH = PROJECT_ROOT / "data" / "processed" / "cleaned_properties.csv"
+DATASET_PATH = _PRIMARY_DATASET_PATH if _PRIMARY_DATASET_PATH.exists() else _FALLBACK_DATASET_PATH
 
 # Cached market data
 _market_cache = None

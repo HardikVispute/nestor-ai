@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { memo, useMemo, useState } from 'react'
 import {
   LineChart,
   Line,
@@ -22,6 +22,8 @@ import {
   ArrowUpRight,
 } from 'lucide-react'
 import { formatCurrency, formatPricePerSqft } from '@/lib/formatters'
+import { LiquidGlass, LiquidGlassButton } from '@/components/ui/liquid-glass'
+import { usePerformanceMode } from '@/contexts/PerformanceContext'
 import type { CityMarketData } from '@/types'
 
 // Real fallback data in case API is offline
@@ -159,19 +161,34 @@ interface MarketIntelligencePanelProps {
   onSelectCityForValuation?: (city: string) => void
 }
 
-export default function MarketIntelligencePanel({
+function MarketIntelligencePanel({
   cityData,
   onSelectCityForValuation,
 }: MarketIntelligencePanelProps) {
-  const data = cityData && cityData.length > 0 ? cityData : DEFAULT_MARKET_DATA
+  const { isLightweight } = usePerformanceMode()
+  const data = useMemo(
+    () => (cityData && cityData.length > 0 ? cityData : DEFAULT_MARKET_DATA),
+    [cityData],
+  )
   const [selectedCity, setSelectedCity] = useState<string>(data[0].city)
 
-  const activeCity = data.find((c) => c.city === selectedCity) || data[0]
+  const activeCity = useMemo(
+    () => data.find((c) => c.city === selectedCity) || data[0],
+    [data, selectedCity],
+  )
 
   return (
-    <div className="space-y-6 pb-12">
+    <div className="space-y-6 pb-12 animate-panel-enter">
       {/* Top Banner */}
-      <div className="glass-panel rounded-2xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <LiquidGlass
+        radius={32}
+        scale={46}
+        aberration={14}
+        bevelDepth={28}
+        frost={0.36}
+        tint={0.06}
+        className="p-6 flex flex-col md:flex-row md:items-center justify-between gap-4"
+      >
         <div>
           <h2 className="text-lg font-bold text-[var(--color-text-primary)] flex items-center gap-2">
             <Compass size={19} className="text-[var(--color-accent)]" />
@@ -182,13 +199,21 @@ export default function MarketIntelligencePanel({
           </p>
         </div>
 
-        <div className="flex items-center gap-2 text-xs font-mono text-[var(--color-accent)] bg-[rgba(39,215,174,0.08)] px-3 py-1.5 rounded-lg border border-[rgba(39,215,174,0.2)]">
+        <div className="flex items-center gap-2 text-xs font-mono text-[var(--color-accent)] bg-[rgba(39,215,174,0.08)] px-4 py-2 rounded-full border border-[rgba(39,215,174,0.2)]">
           <span>{data.length} Urban Hubs Indexed</span>
         </div>
-      </div>
+      </LiquidGlass>
 
       {/* Selected City Focus Hero */}
-      <div className="liquid-glass-panel rounded-2xl p-8 sm:p-10 space-y-6">
+      <LiquidGlass
+        radius={32}
+        scale={52}
+        aberration={16}
+        bevelDepth={34}
+        frost={0.36}
+        tint={0.065}
+        className="p-8 sm:p-10 space-y-6"
+      >
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-white/10">
           <div>
             <div className="flex items-center gap-3">
@@ -196,7 +221,7 @@ export default function MarketIntelligencePanel({
                 {activeCity.city} Metro Corridor
               </h3>
               <span
-                className={`inline-flex items-center gap-1.5 px-3.5 py-1 rounded-xl text-xs font-mono font-semibold ${
+                className={`inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-mono font-semibold ${
                   activeCity.price_trend === 'rising'
                     ? 'bg-[rgba(39,215,174,0.12)] text-[var(--color-accent)] border border-[rgba(39,215,174,0.35)]'
                     : 'bg-[rgba(121,169,245,0.12)] text-[var(--color-accent-blue)] border border-[rgba(121,169,245,0.35)]'
@@ -216,13 +241,20 @@ export default function MarketIntelligencePanel({
           </div>
 
           {onSelectCityForValuation && (
-            <button
+            <LiquidGlassButton
               onClick={() => onSelectCityForValuation(activeCity.city)}
-              className="solid-white-btn rounded-2xl px-6 py-3.5 text-xs sm:text-sm font-semibold gap-2 cursor-pointer self-start sm:self-auto"
+              radius={999}
+              scale={40}
+              aberration={12}
+              bevelDepth={14}
+              frost={0.44}
+              tint={0.2}
+              className="self-start sm:self-auto"
+              glassClassName="px-6 py-3.5 text-xs sm:text-sm font-semibold !border-white/50 text-white"
             >
               <span>Value {activeCity.city} Property</span>
               <ArrowUpRight size={16} />
-            </button>
+            </LiquidGlassButton>
           )}
         </div>
 
@@ -333,14 +365,14 @@ export default function MarketIntelligencePanel({
                     strokeWidth={2.5}
                     fillOpacity={1}
                     fill="url(#marketGradient)"
-                    isAnimationActive={false}
+                    isAnimationActive={!isLightweight}
                   />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
           </div>
         )}
-      </div>
+      </LiquidGlass>
 
       {/* City Switcher Grid */}
       <div className="space-y-4">
@@ -352,47 +384,57 @@ export default function MarketIntelligencePanel({
           {data.map((c) => {
             const isSelected = c.city === activeCity.city
             return (
-              <button
+              <LiquidGlass
                 key={c.city}
-                onClick={() => setSelectedCity(c.city)}
-                className={`liquid-glass-card rounded-2xl p-6 text-left transition-all cursor-pointer ${
-                  isSelected ? 'border-[var(--color-accent)] bg-white/[0.08]' : 'hover:border-white/30'
+                radius={28}
+                scale={44}
+                aberration={13}
+                bevelDepth={24}
+                frost={0.35}
+                tint={isSelected ? 0.1 : 0.055}
+                className={`transition-all ${
+                  isSelected ? 'border-[var(--color-accent)]/70' : 'hover:border-white/30'
                 }`}
               >
-                <div className="flex items-center justify-between">
-                  <div className="font-bold text-lg text-white">
-                    {c.city}
+                <button
+                  onClick={() => setSelectedCity(c.city)}
+                  className="w-full p-6 text-left cursor-pointer"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="font-bold text-lg text-white">
+                      {c.city}
+                    </div>
+                    <span
+                      className={`text-xs font-mono px-3 py-1 rounded-full ${
+                        c.price_trend === 'rising'
+                          ? 'bg-[rgba(39,215,174,0.15)] text-[var(--color-accent)] border border-[rgba(39,215,174,0.3)]'
+                          : 'bg-[rgba(121,169,245,0.15)] text-[var(--color-accent-blue)] border border-[rgba(121,169,245,0.3)]'
+                      }`}
+                    >
+                      {c.price_trend.toUpperCase()}
+                    </span>
                   </div>
-                  <span
-                    className={`text-xs font-mono px-3 py-1 rounded-xl ${
-                      c.price_trend === 'rising'
-                        ? 'bg-[rgba(39,215,174,0.15)] text-[var(--color-accent)] border border-[rgba(39,215,174,0.3)]'
-                        : 'bg-[rgba(121,169,245,0.15)] text-[var(--color-accent-blue)] border border-[rgba(121,169,245,0.3)]'
-                    }`}
-                  >
-                    {c.price_trend.toUpperCase()}
-                  </span>
-                </div>
 
-                <div className="mt-4 flex items-baseline justify-between">
-                  <span className="text-xs text-[var(--color-text-muted)]">Avg Rate:</span>
-                  <span className="text-sm font-mono font-bold text-[var(--color-text-primary)]">
-                    {formatPricePerSqft(c.avg_price_per_sqft)}
-                  </span>
-                </div>
+                  <div className="mt-4 flex items-baseline justify-between">
+                    <span className="text-xs text-[var(--color-text-muted)]">Avg Rate:</span>
+                    <span className="text-sm font-mono font-bold text-[var(--color-text-primary)]">
+                      {formatPricePerSqft(c.avg_price_per_sqft)}
+                    </span>
+                  </div>
 
-                <div className="mt-1.5 flex items-baseline justify-between">
-                  <span className="text-xs text-[var(--color-text-muted)]">Median Price:</span>
-                  <span className="text-sm font-mono font-bold text-[var(--color-accent)]">
-                    {formatCurrency(c.median_price)}
-                  </span>
-                </div>
+                  <div className="mt-1.5 flex items-baseline justify-between">
+                    <span className="text-xs text-[var(--color-text-muted)]">Median Price:</span>
+                    <span className="text-sm font-mono font-bold text-[var(--color-accent)]">
+                      {formatCurrency(c.median_price)}
+                    </span>
+                  </div>
 
-                <div className="mt-1.5 flex items-baseline justify-between text-xs text-[var(--color-text-muted)]">
-                  <span>Listings:</span>
-                  <span className="font-mono font-semibold text-white/80">{c.total_listings.toLocaleString('en-IN')}</span>
-                </div>
-              </button>
+                  <div className="mt-1.5 flex items-baseline justify-between text-xs text-[var(--color-text-muted)]">
+                    <span>Listings:</span>
+                    <span className="font-mono font-semibold text-white/80">{c.total_listings.toLocaleString('en-IN')}</span>
+                  </div>
+                </button>
+              </LiquidGlass>
             )
           })}
         </div>
@@ -400,3 +442,5 @@ export default function MarketIntelligencePanel({
     </div>
   )
 }
+
+export default memo(MarketIntelligencePanel)

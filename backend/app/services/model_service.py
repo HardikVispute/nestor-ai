@@ -14,11 +14,27 @@ import joblib
 
 logger = logging.getLogger("nestor.model_service")
 
+BACKEND_ROOT = Path(__file__).resolve().parents[2]  # nestor-ai/backend/
 PROJECT_ROOT = Path(__file__).resolve().parents[3]  # nestor-ai/
-ARTIFACTS_DIR = PROJECT_ROOT / "artifacts"
-MODEL_PATH = ARTIFACTS_DIR / "model.joblib"
-METADATA_PATH = ARTIFACTS_DIR / "model_metadata.json"
-DATASET_PATH = PROJECT_ROOT / "data" / "processed" / "cleaned_properties.csv"
+
+
+def _resolve_asset(primary: Path, fallback: Path) -> Path:
+    """Resolve runtime asset inside backend/ first (Vercel service root), falling back to repo root."""
+    return primary if primary.exists() else fallback
+
+
+MODEL_PATH = _resolve_asset(
+    BACKEND_ROOT / "artifacts" / "model.joblib",
+    PROJECT_ROOT / "artifacts" / "model.joblib",
+)
+METADATA_PATH = _resolve_asset(
+    BACKEND_ROOT / "artifacts" / "model_metadata.json",
+    PROJECT_ROOT / "artifacts" / "model_metadata.json",
+)
+DATASET_PATH = _resolve_asset(
+    BACKEND_ROOT / "data" / "cleaned_properties.csv",
+    PROJECT_ROOT / "data" / "processed" / "cleaned_properties.csv",
+)
 
 
 class ModelService:

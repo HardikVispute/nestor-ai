@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import 'typeface-glacial-indifference'
 import './globals.css'
+import { PerformanceProvider } from '@/contexts/PerformanceContext'
 
 export const metadata: Metadata = {
   title: 'NESTOR AI | Property Valuation Intelligence',
@@ -24,7 +25,7 @@ export default function RootLayout({
         />
       </head>
       <body className="h-full bg-black text-white font-body antialiased">
-        {children}
+        <PerformanceProvider>{children}</PerformanceProvider>
       </body>
     </html>
   )

@@ -64,39 +64,41 @@ NESTOR AI is an institutional-grade property valuation intelligence platform eng
 ### Component Breakdown
 
 1. **Navigation Rail (`Sidebar.tsx`)**:
-   - Fixed 76px width, 100vh full-height sticky positioning.
-   - Top: Squircle emblem with letter "N", institutional emerald border & glow.
-   - Vertical buttons with 19px Lucide icons, uppercase micro-labels, and hover flyout tooltips.
-   - Active state: Emerald vertical indicator pill on left edge (`width: 3px`) + elevated background.
+   - Fixed `88px` layout column that smoothly expands to `268px` on hover/focus (`duration-200`), keeping `28px` Lucide icons anchored while `16px` Glacial Indifference labels appear on the right side without triggering workspace reflow.
+   - Top: `52x52` squircle emblem with letter "N", institutional emerald border.
+   - Full `blur(28px) saturate(160%)` glass surface in Full FX (optional Performance Mode disables heavy blur).
 2. **Telemetry Header (`Header.tsx`)**:
-   - Sticky top 72px height, glass material (`backdrop-filter: blur(18px)`).
-   - Left: Breadcrumb hierarchy (`NESTOR AI / Section`) + challenge tag.
-   - Center: Interactive search command bar with keyboard shortcut (`⌘K`).
-   - Right: Real-time model pulse dot (`Model Ready · HistGradientBoosting`), 65k listings count, and "+ New Valuation" CTA.
+   - Sticky top `84px` height, `backdrop-filter: blur(24px)` glass material.
+   - Left: Breadcrumb hierarchy (`NESTOR AI / Section`) + Glacial Indifference title.
+   - Center: Interactive search command bar (`⌘K`).
+   - Right: Unobtrusive `Full FX` (default) / `Performance` toggle, 65k listings counter, animated `animate-ping` model status dot, and "+ New Valuation" CTA.
 3. **Overview Command Center (`OverviewPanel.tsx`)**:
-   - Continuous 4-segment KPI strip partitioned by subtle vertical dividers (`divide-[rgba(148,163,184,0.12)]`).
-   - Interactive Recharts Area/Line chart for unit asking rates (₹/sq.ft.) with toggle for volume.
-   - Champion Model specifications: Loss formulation, 52k/13k data split, test MAE (₹25.62 L), and target leakage guard.
-   - Metro cluster distribution progress bars and 13k test residual dispersion tiers.
+   - Full optical `<LiquidGlass>` refraction (`scale={36–40}`, `aberration={10–12}`, `bevelDepth={20–24}`, `frost={0.6–0.7}`) across Hero, 4-segment KPI strip, Metro Market chart panel, Valuation Intelligence panel, Metro Cluster Coverage, and Residual Dispersion.
+   - Interactive Recharts Area/Bar charts with smooth entrance/draw animations in Full FX.
 4. **Valuation Workspace (`PropertyForm.tsx` & `ValuationResultPanel.tsx`)**:
-   - Preset chips: 4 real institutional archetypes (Bengaluru Tech Corridor, Mumbai High-Rise, Gurgaon Golf Course, South Delhi Builder Floor).
-   - Grouped 4-section layout: Geographic Location, Room Configuration, Space & Elevation, Asset Condition & Ownership Title.
-   - Inline physical validation: Checks `super_builtup_area >= carpet_area` and `floor_number <= total_floors`.
-   - Hero valuation card with INR formatting (Crores / Lakhs), unit rate, 80% empirical envelope gauge, factor attribution waterfall, and 5 nearest comps.
+   - Preset chips: 4 real institutional archetypes.
+   - Nested inputs with `bg-black/60 backdrop-blur-md` glass styling.
+   - All result panels rendered with full optical `<LiquidGlass>` refraction, animated result reveal (`animate-result-reveal`), INR formatting, 80% empirical envelope gauge, factor drivers, and 5 nearest comps.
 5. **Valuation Audit Trail (`ValuationHistoryPanel.tsx`)**:
-   - Session persistence using `localStorage`.
-   - Search & city filtering.
-   - Single-click "Inspect" action to reload any historical valuation back into the workspace.
-   - One-click CSV audit ledger export.
+   - Session persistence using `localStorage`, memoized filtering, full `<LiquidGlass>` surfaces, single-click reload, and CSV export.
 6. **Market Intelligence (`MarketIntelligencePanel.tsx`)**:
-   - Connected to `/api/market/trends` serving 14 real city aggregates from `cleaned_properties.csv`.
-   - 12-month housing price index (HPI) normalized area chart.
+   - Connected to `/api/market/trends` serving 14 real city aggregates; full `<LiquidGlass>` refraction across banner, active city hero, and metro city grid cards.
 
 ---
 
 ## 4. Typography & Numerals
 
-- **Font Family**: Inter, ui-sans-serif, system-ui, -apple-system.
-- **Monospace & Telemetry**: ui-monospace, Cascadia Code, Menlo.
-- **Financial Figures**: All currency, square footages, percentages, and timestamps must use `font-variant-numeric: tabular-nums` (`tabular-nums` CSS class) to guarantee alignment across tables and metric cards.
+- **Primary Font Family**: `'Glacial Indifference', 'Barlow', sans-serif` (locally bundled via `typeface-glacial-indifference` & `/fonts/glacial-indifference/`).
+- **Monospace & Telemetry**: `ui-monospace, Cascadia Code, Menlo`.
+- **Financial Figures**: All currency, square footages, percentages, and timestamps use `font-variant-numeric: tabular-nums` (`tabular-nums` CSS class).
+
+---
+
+## 5. Cinematic Backdrop & Experience Modes
+
+- **Cinematic Waves (`BackgroundWaves.tsx` + `LiquidChromeWavesCanvas.tsx`)**:
+  - Attempts the Mux HLS stream (`useOptimizedHlsVideo.ts`) and renders a live 60fps animated liquid chrome & emerald metallic wave canvas (`LiquidChromeWavesCanvas`) whenever external HLS is unauthorized (HTTP 403) or buffering.
+- **Experience Modes (`PerformanceContext.tsx`)**:
+  - **Full FX (Default)**: Full optical `LiquidGlass` RGB chromatic aberration (`aberration={8–12}`, `frost={0.55–0.7}`), animated metallic chrome waves, `animate-ping` telemetry indicators, chart animations, and layered glass blurs.
+  - **Performance Mode (Optional Toggle)**: Persisted in `localStorage`; disables SVG displacement filters, drops backdrop blurs, pauses animated wave canvas motion, and disables hover/entrance animations.
 
