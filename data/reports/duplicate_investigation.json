@@ -1,0 +1,12 @@
+{
+  "total_records": 187531,
+  "exact_duplicates_all_columns_including_index": 0,
+  "exact_duplicates_excluding_index": 119339,
+  "exact_duplicates_title_desc_amount_location": 119571,
+  "same_physical_specs_and_price": 121173,
+  "societies_with_multiple_listings": 5245,
+  "deduplication_policy": {
+    "conservative_criterion": "Remove only records where Title, Description, Amount, location, Carpet Area, and Floor are 100% identical (i.e. identical syndicated ad reposts).",
+    "justification": "Preserves genuine distinct units within the same building/complex that share general location and dimensions but represent separate physical market transactions."
+  }
+}

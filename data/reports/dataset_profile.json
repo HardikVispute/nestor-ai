@@ -1,0 +1,359 @@
+{
+  "metadata": {
+    "dataset_file": "data/raw/house_prices.csv",
+    "source": "Kaggle: juhibhojani/house-price",
+    "total_records": 187531,
+    "total_columns": 21,
+    "column_names": [
+      "Index",
+      "Title",
+      "Description",
+      "Amount(in rupees)",
+      "Price (in rupees)",
+      "location",
+      "Carpet Area",
+      "Status",
+      "Floor",
+      "Transaction",
+      "Furnishing",
+      "facing",
+      "overlooking",
+      "Society",
+      "Bathroom",
+      "Balcony",
+      "Car Parking",
+      "Ownership",
+      "Super Area",
+      "Dimensions",
+      "Plot Area"
+    ]
+  },
+  "hygiene_audit": {
+    "exact_duplicate_rows": 0,
+    "semantic_duplicate_rows": 121459,
+    "invalid_or_missing_prices": 9684,
+    "missing_both_carpet_and_super_area": 827,
+    "missing_bhk_in_title": 31
+  },
+  "target_leakage_warning": {
+    "leakage_column": "Price (in rupees)",
+    "explanation": "Column 'Price (in rupees)' is verified as price_per_sqft (e.g. 6000.0 INR/sq.ft. for a 42 Lac 500 sqft apartment). Must be excluded from feature set."
+  },
+  "columns": {
+    "Index": {
+      "dtype": "int64",
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "unique_values": 187531,
+      "sample_values": [
+        "0",
+        "1",
+        "2"
+      ]
+    },
+    "Title": {
+      "dtype": "str",
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "unique_values": 32446,
+      "sample_values": [
+        "1 BHK Ready to Occupy Flat for sale in Srushti Siddhi Mangal Murti Complex Bhiwandi",
+        "2 BHK Ready to Occupy Flat for sale in Dosti Vihar Pokhran Road",
+        "2 BHK Ready to Occupy Flat for sale in Sunrise by Kalpataru Kolshet Road"
+      ]
+    },
+    "Description": {
+      "dtype": "str",
+      "missing_count": 3023,
+      "missing_pct": 1.61,
+      "unique_values": 65634,
+      "sample_values": [
+        "Bhiwandi, Thane has an attractive 1 BHK Flat for sale. The property is ideally located in a strategic location in Srushti Siddhi Mangal Murti Complex township. This flat for resale is a choice property. This apartment ready to move in the Bhiwandi is available for an attractive price of\u00a0INR 42 Lac. You will find it unfurnished.",
+        "One can find this stunning 2 BHK flat for sale in Pokhran Road, Thane. It enjoys an excellent location within the\u00a0Dosti Vihar. This flat for resale is a choice property. This ready to move flat in Pokhran Road can be availed at a reasonable price of INR 98 Lac. This semi-furnished flat is strategically designed with all the amenities to enhance the living experience. The property is strategically placed near prominent places as near singhaniya school which make for the smooth living of residents.",
+        "Up for immediate sale is a 2 BHK apartment in Kolshet Road, Thane. Don't miss this bargain flat for sale. Situated in the Sunrise By Kalpataru township, it has a prime location. This flat for resale has a desirable location. You can buy this ready to move flat in Kolshet Road at a reasonable price of INR 1.40 Cr. This unfurnished flat is strategically designed with all the amenities to enhance the living experience. Landmarks near the apartment include pokhran road no 2."
+      ]
+    },
+    "Amount(in rupees)": {
+      "dtype": "str",
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "unique_values": 1561,
+      "sample_values": [
+        "42 Lac ",
+        "98 Lac ",
+        "1.40 Cr "
+      ]
+    },
+    "Price (in rupees)": {
+      "dtype": "float64",
+      "missing_count": 17665,
+      "missing_pct": 9.42,
+      "unique_values": 10958,
+      "sample_values": [
+        "6000.0",
+        "13799.0",
+        "17500.0"
+      ]
+    },
+    "location": {
+      "dtype": "str",
+      "missing_count": 0,
+      "missing_pct": 0.0,
+      "unique_values": 81,
+      "sample_values": [
+        "thane",
+        "thane",
+        "thane"
+      ]
+    },
+    "Carpet Area": {
+      "dtype": "str",
+      "missing_count": 80673,
+      "missing_pct": 43.02,
+      "unique_values": 2758,
+      "sample_values": [
+        "500 sqft",
+        "473 sqft",
+        "779 sqft"
+      ]
+    },
+    "Status": {
+      "dtype": "str",
+      "missing_count": 615,
+      "missing_pct": 0.33,
+      "unique_values": 1,
+      "sample_values": [
+        "Ready to Move",
+        "Ready to Move",
+        "Ready to Move"
+      ]
+    },
+    "Floor": {
+      "dtype": "str",
+      "missing_count": 7077,
+      "missing_pct": 3.77,
+      "unique_values": 947,
+      "sample_values": [
+        "10 out of 11",
+        "3 out of 22",
+        "10 out of 29"
+      ]
+    },
+    "Transaction": {
+      "dtype": "str",
+      "missing_count": 83,
+      "missing_pct": 0.04,
+      "unique_values": 4,
+      "sample_values": [
+        "Resale",
+        "Resale",
+        "Resale"
+      ]
+    },
+    "Furnishing": {
+      "dtype": "str",
+      "missing_count": 2897,
+      "missing_pct": 1.54,
+      "unique_values": 3,
+      "sample_values": [
+        "Unfurnished",
+        "Semi-Furnished",
+        "Unfurnished"
+      ]
+    },
+    "facing": {
+      "dtype": "str",
+      "missing_count": 70233,
+      "missing_pct": 37.45,
+      "unique_values": 8,
+      "sample_values": [
+        "East",
+        "East",
+        "West"
+      ]
+    },
+    "overlooking": {
+      "dtype": "str",
+      "missing_count": 81436,
+      "missing_pct": 43.43,
+      "unique_values": 19,
+      "sample_values": [
+        "Garden/Park",
+        "Garden/Park",
+        "Garden/Park, Main Road"
+      ]
+    },
+    "Society": {
+      "dtype": "str",
+      "missing_count": 109678,
+      "missing_pct": 58.49,
+      "unique_values": 10376,
+      "sample_values": [
+        "Srushti Siddhi Mangal Murti Complex",
+        "Dosti Vihar",
+        "Sunrise by Kalpataru"
+      ]
+    },
+    "Bathroom": {
+      "dtype": "str",
+      "missing_count": 828,
+      "missing_pct": 0.44,
+      "unique_values": 11,
+      "sample_values": [
+        "1",
+        "2",
+        "2"
+      ]
+    },
+    "Balcony": {
+      "dtype": "str",
+      "missing_count": 48935,
+      "missing_pct": 26.09,
+      "unique_values": 11,
+      "sample_values": [
+        "2",
+        "1",
+        "1"
+      ]
+    },
+    "Car Parking": {
+      "dtype": "str",
+      "missing_count": 103357,
+      "missing_pct": 55.11,
+      "unique_values": 229,
+      "sample_values": [
+        "1 Open",
+        "1 Covered",
+        "1 Covered"
+      ]
+    },
+    "Ownership": {
+      "dtype": "str",
+      "missing_count": 65517,
+      "missing_pct": 34.94,
+      "unique_values": 4,
+      "sample_values": [
+        "Freehold",
+        "Freehold",
+        "Co-operative Society"
+      ]
+    },
+    "Super Area": {
+      "dtype": "str",
+      "missing_count": 107685,
+      "missing_pct": 57.42,
+      "unique_values": 2976,
+      "sample_values": [
+        "680 sqft",
+        "575 sqft",
+        "600 sqft"
+      ]
+    },
+    "Dimensions": {
+      "dtype": "float64",
+      "missing_count": 187531,
+      "missing_pct": 100.0,
+      "unique_values": 0,
+      "sample_values": []
+    },
+    "Plot Area": {
+      "dtype": "float64",
+      "missing_count": 187531,
+      "missing_pct": 100.0,
+      "unique_values": 0,
+      "sample_values": []
+    }
+  },
+  "price_distribution_inr": {
+    "valid_count": 177847,
+    "min_inr": 100000.0,
+    "max_inr": 14003000000.0,
+    "mean_inr": 11981344.189106368,
+    "median_inr": 7800000.0,
+    "p25_inr": 4840000.0,
+    "p75_inr": 14500000.0,
+    "p95_inr": 33900000.0,
+    "p99_inr": 70000000.0
+  },
+  "carpet_area_distribution_sqft": {
+    "valid_count": 106858,
+    "plausible_count_100_to_20k": 105096,
+    "min_sqft": 1.0,
+    "max_sqft": 65340000.0,
+    "median_sqft": 1064.0,
+    "mean_sqft": 1874.2837424797394,
+    "p25_sqft": 800.0,
+    "p75_sqft": 1500.0
+  },
+  "bhk_distribution": {
+    "1 BHK": 13174,
+    "2 BHK": 75508,
+    "3 BHK": 80848,
+    "4 BHK": 16600,
+    "5 BHK": 1183,
+    "6 BHK": 98,
+    "7 BHK": 22,
+    "8 BHK": 17,
+    "9 BHK": 7,
+    "10 BHK": 43
+  },
+  "top_locations": {
+    "new-delhi": 27599,
+    "bangalore": 24030,
+    "kolkata": 22380,
+    "gurgaon": 20070,
+    "ahmedabad": 12750,
+    "hyderabad": 12300,
+    "chennai": 10500,
+    "jaipur": 8490,
+    "greater-noida": 4710,
+    "faridabad": 3840,
+    "vadodara": 2388,
+    "surat": 2370,
+    "pune": 2225,
+    "thane": 1933,
+    "mumbai": 1860,
+    "visakhapatnam": 1800,
+    "mohali": 1710,
+    "zirakpur": 1530,
+    "chandigarh": 1440,
+    "noida": 1281,
+    "goa": 1200,
+    "ranchi": 1080,
+    "bhiwadi": 1050,
+    "kochi": 1050,
+    "dehradun": 990
+  },
+  "status_distribution": {
+    "Ready to Move": 186916
+  },
+  "furnishing_distribution": {
+    "Semi-Furnished": 88318,
+    "Unfurnished": 76154,
+    "Furnished": 20162
+  },
+  "transaction_distribution": {
+    "Resale": 144172,
+    "New Property": 42565,
+    "Other": 709,
+    "Rent/Lease": 2
+  },
+  "bathroom_distribution": {
+    "1 Baths": 18654,
+    "2 Baths": 93007,
+    "3 Baths": 55781,
+    "4 Baths": 15600,
+    "5 Baths": 3343,
+    "6 Baths": 209,
+    "7 Baths": 35,
+    "8 Baths": 14
+  },
+  "balcony_distribution": {
+    "1 Balconies": 49219,
+    "2 Balconies": 51809,
+    "3 Balconies": 27111,
+    "4 Balconies": 9420,
+    "5 Balconies": 841,
+    "6 Balconies": 132
+  }
+}

@@ -1,0 +1,366 @@
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Barlow:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+/* ============================================================
+   Glacial Indifference — High-End Geometric Typography
+   ============================================================ */
+@font-face {
+  font-family: 'Glacial Indifference';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src:
+    url('/fonts/glacial-indifference/glacial-indifference-400.woff2') format('woff2'),
+    url('/fonts/glacial-indifference/glacial-indifference-400.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Glacial Indifference';
+  font-style: italic;
+  font-display: swap;
+  font-weight: 400;
+  src:
+    url('/fonts/glacial-indifference/glacial-indifference-400italic.woff2') format('woff2'),
+    url('/fonts/glacial-indifference/glacial-indifference-400italic.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Glacial Indifference';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src:
+    url('/fonts/glacial-indifference/glacial-indifference-700.woff2') format('woff2'),
+    url('/fonts/glacial-indifference/glacial-indifference-700.woff') format('woff');
+}
+
+/* ============================================================
+   NESTOR AI — Institutional Fintech Design System
+   Unified Geometry & Visual Scale (VisionOS Spec)
+   ============================================================ */
+
+@theme {
+  --font-heading: 'Glacial Indifference', sans-serif;
+  --font-body: 'Glacial Indifference', 'Barlow', sans-serif;
+}
+
+:root {
+  /* Unified Geometry (Panels, Cards, Buttons, and Inputs share this exact radius) */
+  --ui-radius: 20px;
+  --ui-radius-sm: 16px;
+  --ui-radius-lg: 24px;
+
+  /* Background layers - Pure Black Canvas */
+  --color-bg: #000000;
+  --color-bg-secondary: #05080E;
+  
+  /* Glass Surface layers */
+  --color-surface: #070D18;
+  --color-surface-glass: rgba(255, 255, 255, 0.035);
+  --color-surface-elevated: rgba(255, 255, 255, 0.06);
+  --color-surface-subtle: rgba(255, 255, 255, 0.02);
+  --color-surface-highlight: rgba(255, 255, 255, 0.08);
+
+  /* Borders & Specular Sheen */
+  --color-border: rgba(255, 255, 255, 0.14);
+  --color-border-glass: rgba(255, 255, 255, 0.18);
+  --color-border-glow: rgba(39, 215, 174, 0.45);
+
+  /* Text hierarchy */
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: rgba(255, 255, 255, 0.75);
+  --color-text-muted: rgba(255, 255, 255, 0.45);
+  --color-text-disabled: rgba(255, 255, 255, 0.2);
+
+  /* Accent (Institutional Emerald / Teal) */
+  --color-accent: #27D7AE;
+  --color-accent-dim: rgba(39, 215, 174, 0.14);
+  --color-accent-hover: #1FBE99;
+  --color-accent-glow: rgba(39, 215, 174, 0.35);
+
+  /* Secondary Accent (Ice Blue) */
+  --color-accent-blue: #79A9F5;
+  --color-accent-blue-dim: rgba(121, 169, 245, 0.14);
+
+  /* Semantics */
+  --color-success: #27D7AE;
+  --color-info: #8EB7F5;
+  --color-warning: #F5C451;
+  --color-danger: #F07878;
+
+  /* Typography Variables */
+  --font-heading: 'Glacial Indifference', sans-serif;
+  --font-body: 'Glacial Indifference', 'Barlow', sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas,
+    'DejaVu Sans Mono', monospace;
+}
+
+/* ============================================================
+   Base CSS Reset & Scaled Typography
+   ============================================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: #000000;
+  color: #FFFFFF;
+  font-family: 'Glacial Indifference', 'Barlow', sans-serif;
+  font-size: 16px; /* Scaled up from 14px for bold visual clarity */
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3 {
+  font-family: 'Glacial Indifference', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.font-heading {
+  font-family: 'Glacial Indifference', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+.font-body {
+  font-family: 'Glacial Indifference', 'Barlow', sans-serif;
+}
+
+ul, ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@layer base {
+  button {
+    background: none;
+    border: none;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+  }
+}
+
+/* ============================================================
+   Apple Liquid Glass Architecture (Panels & Buttons)
+   All panels, inner cards, and buttons share --ui-radius (20px)
+   ============================================================ */
+
+/* Outlined Glass Panels (VisionOS / Orbit Spec) */
+.liquid-glass-panel,
+.glass-panel {
+  background: rgba(255, 255, 255, 0.035);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--ui-radius) !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  position: relative;
+}
+
+.liquid-glass-panel::before,
+.glass-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.6) 20%,
+    rgba(255, 255, 255, 0.8) 50%,
+    rgba(255, 255, 255, 0.6) 80%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
+  pointer-events: none;
+}
+
+/* Outlined Glass Cards (Identical Inner Radius) */
+.liquid-glass-card,
+.glass-card {
+  background: rgba(255, 255, 255, 0.025);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--ui-radius) !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.liquid-glass-card:hover,
+.glass-card-hover:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.28);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  transform: translateY(-1px);
+}
+
+/* Spacious Outlined Glass Buttons (Identical Radius to Panels) */
+.liquid-glass-btn {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  color: #FFFFFF;
+  border-radius: var(--ui-radius) !important;
+  padding: 16px 36px !important;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  gap: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  white-space: nowrap;
+}
+
+.liquid-glass-btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.48);
+  box-shadow: 0 14px 44px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.75);
+  transform: translateY(-1px) scale(1.02);
+}
+
+.liquid-glass-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Spacious Solid Buttons (Identical Radius to Panels) */
+.solid-white-btn {
+  background: #FFFFFF;
+  color: #0A0A0A;
+  border-radius: var(--ui-radius) !important;
+  padding: 16px 36px !important;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  gap: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.solid-white-btn:hover {
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
+  transform: translateY(-1px) scale(1.02);
+}
+
+.solid-white-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Emerald Accent Glass Button */
+.accent-glass-btn {
+  background: rgba(39, 215, 174, 0.14);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(39, 215, 174, 0.45);
+  box-shadow: 0 10px 40px rgba(39, 215, 174, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  color: #FFFFFF;
+  border-radius: var(--ui-radius) !important;
+  padding: 16px 36px !important;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.accent-glass-btn:hover {
+  background: rgba(39, 215, 174, 0.24);
+  border-color: rgba(39, 215, 174, 0.75);
+  box-shadow: 0 14px 44px rgba(39, 215, 174, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.75);
+  transform: translateY(-1px) scale(1.02);
+}
+
+.accent-glass-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Compact Glass Pill */
+.glass-pill {
+  border-radius: var(--ui-radius) !important;
+  padding: 8px 18px !important;
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Inputs & Form Controls */
+input, select, textarea {
+  border-radius: var(--ui-radius) !important;
+  font-family: var(--font-body);
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum';
+}
+
+/* Glow accent */
+.accent-glow {
+  box-shadow: 0 0 20px -3px var(--color-accent-glow);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #000000;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) #000000;
+}
+
+/* Focus */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+::selection {
+  background-color: var(--color-accent-dim);
+  color: var(--color-accent);
+}

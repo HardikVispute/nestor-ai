@@ -1,0 +1,438 @@
+{
+  "champion_model": "HistGradientBoosting",
+  "models": {
+    "Baseline (Median)": {
+      "MAE_INR": 5919710.77,
+      "RMSE_INR": 13830353.29,
+      "MAPE_pct": 64.15,
+      "R2_score": -0.0695
+    },
+    "Ridge Regression": {
+      "MAE_INR": 20721118.49,
+      "RMSE_INR": 1876623032.34,
+      "MAPE_pct": 45.55,
+      "R2_score": -19689.7183
+    },
+    "Random Forest": {
+      "MAE_INR": 2662358.33,
+      "RMSE_INR": 6254029.56,
+      "MAPE_pct": 27.09,
+      "R2_score": 0.7813
+    },
+    "HistGradientBoosting": {
+      "MAE_INR": 2561670.25,
+      "RMSE_INR": 6654209.47,
+      "MAPE_pct": 24.36,
+      "R2_score": 0.7524
+    }
+  },
+  "residual_stats": {
+    "mean_residual_inr": 628108.1731630263,
+    "std_residual_inr": 6624498.756047184,
+    "within_10_pct_accuracy": 28.599999999999998,
+    "within_20_pct_accuracy": 53.400000000000006,
+    "within_30_pct_accuracy": 71.57692307692308
+  },
+  "city_breakdown": {
+    "Agra": {
+      "MAE_INR": 1262104.89,
+      "RMSE_INR": 1995967.91,
+      "MAPE_pct": 26.51,
+      "R2_score": 0.6665,
+      "sample_count": 92,
+      "median_actual_inr": 4500000.0
+    },
+    "Ahmedabad": {
+      "MAE_INR": 2253621.2,
+      "RMSE_INR": 4145827.78,
+      "MAPE_pct": 23.71,
+      "R2_score": 0.789,
+      "sample_count": 559,
+      "median_actual_inr": 6800000.0
+    },
+    "Aurangabad": {
+      "MAE_INR": 1011886.07,
+      "RMSE_INR": 1403983.92,
+      "MAPE_pct": 26.5,
+      "R2_score": 0.4761,
+      "sample_count": 83,
+      "median_actual_inr": 3500000.0
+    },
+    "Badlapur": {
+      "MAE_INR": 550372.82,
+      "RMSE_INR": 760684.99,
+      "MAPE_pct": 19.62,
+      "R2_score": 0.508,
+      "sample_count": 80,
+      "median_actual_inr": 2700000.0
+    },
+    "Bengaluru": {
+      "MAE_INR": 3677752.37,
+      "RMSE_INR": 7639993.98,
+      "MAPE_pct": 26.62,
+      "R2_score": 0.6588,
+      "sample_count": 564,
+      "median_actual_inr": 8450000.0
+    },
+    "Bhiwadi": {
+      "MAE_INR": 631821.7,
+      "RMSE_INR": 937252.56,
+      "MAPE_pct": 22.73,
+      "R2_score": 0.515,
+      "sample_count": 208,
+      "median_actual_inr": 2450000.0
+    },
+    "Bhubaneswar": {
+      "MAE_INR": 1984063.11,
+      "RMSE_INR": 3066649.4,
+      "MAPE_pct": 22.27,
+      "R2_score": 0.522,
+      "sample_count": 100,
+      "median_actual_inr": 7700000.0
+    },
+    "Chandigarh": {
+      "MAE_INR": 1991507.91,
+      "RMSE_INR": 3595366.76,
+      "MAPE_pct": 23.69,
+      "R2_score": 0.2507,
+      "sample_count": 278,
+      "median_actual_inr": 7200000.0
+    },
+    "Chennai": {
+      "MAE_INR": 3335770.37,
+      "RMSE_INR": 7042393.03,
+      "MAPE_pct": 29.5,
+      "R2_score": 0.6568,
+      "sample_count": 587,
+      "median_actual_inr": 6700000.0
+    },
+    "Coimbatore": {
+      "MAE_INR": 1485618.93,
+      "RMSE_INR": 3332268.26,
+      "MAPE_pct": 17.75,
+      "R2_score": 0.3351,
+      "sample_count": 110,
+      "median_actual_inr": 6000000.0
+    },
+    "Dehradun": {
+      "MAE_INR": 1684451.89,
+      "RMSE_INR": 2863614.59,
+      "MAPE_pct": 18.76,
+      "R2_score": 0.7523,
+      "sample_count": 179,
+      "median_actual_inr": 6500000.0
+    },
+    "Delhi": {
+      "MAE_INR": 6829777.69,
+      "RMSE_INR": 15360378.2,
+      "MAPE_pct": 30.57,
+      "R2_score": 0.7743,
+      "sample_count": 574,
+      "median_actual_inr": 16000000.0
+    },
+    "Faridabad": {
+      "MAE_INR": 1689496.81,
+      "RMSE_INR": 2791322.89,
+      "MAPE_pct": 19.93,
+      "R2_score": 0.8035,
+      "sample_count": 576,
+      "median_actual_inr": 7550000.0
+    },
+    "Ghaziabad": {
+      "MAE_INR": 1935879.25,
+      "RMSE_INR": 2898698.44,
+      "MAPE_pct": 29.06,
+      "R2_score": 0.6819,
+      "sample_count": 181,
+      "median_actual_inr": 5800000.0
+    },
+    "Goa": {
+      "MAE_INR": 2740849.99,
+      "RMSE_INR": 4627543.97,
+      "MAPE_pct": 26.43,
+      "R2_score": 0.6088,
+      "sample_count": 237,
+      "median_actual_inr": 7500000.0
+    },
+    "Greater Noida": {
+      "MAE_INR": 1465608.62,
+      "RMSE_INR": 2637810.68,
+      "MAPE_pct": 19.79,
+      "R2_score": 0.7376,
+      "sample_count": 618,
+      "median_actual_inr": 6135000.0
+    },
+    "Guntur": {
+      "MAE_INR": 1320760.18,
+      "RMSE_INR": 1771535.67,
+      "MAPE_pct": 40.44,
+      "R2_score": 0.6407,
+      "sample_count": 58,
+      "median_actual_inr": 5350000.0
+    },
+    "Gurgaon": {
+      "MAE_INR": 7245028.57,
+      "RMSE_INR": 15302812.63,
+      "MAPE_pct": 27.0,
+      "R2_score": 0.5705,
+      "sample_count": 591,
+      "median_actual_inr": 20000000.0
+    },
+    "Guwahati": {
+      "MAE_INR": 2406533.54,
+      "RMSE_INR": 13271286.24,
+      "MAPE_pct": 20.14,
+      "R2_score": 0.285,
+      "sample_count": 158,
+      "median_actual_inr": 6000000.0
+    },
+    "Hyderabad": {
+      "MAE_INR": 3055593.31,
+      "RMSE_INR": 6650685.08,
+      "MAPE_pct": 20.44,
+      "R2_score": 0.7565,
+      "sample_count": 542,
+      "median_actual_inr": 9350000.0
+    },
+    "Jaipur": {
+      "MAE_INR": 1566985.26,
+      "RMSE_INR": 2739935.41,
+      "MAPE_pct": 22.57,
+      "R2_score": 0.7409,
+      "sample_count": 538,
+      "median_actual_inr": 5395000.0
+    },
+    "Jamshedpur": {
+      "MAE_INR": 1325931.34,
+      "RMSE_INR": 2375908.7,
+      "MAPE_pct": 22.73,
+      "R2_score": 0.3893,
+      "sample_count": 114,
+      "median_actual_inr": 4400000.0
+    },
+    "Kalyan": {
+      "MAE_INR": 1503959.2,
+      "RMSE_INR": 2766175.88,
+      "MAPE_pct": 36.89,
+      "R2_score": 0.2674,
+      "sample_count": 115,
+      "median_actual_inr": 4450000.0
+    },
+    "Kanpur": {
+      "MAE_INR": 1906095.15,
+      "RMSE_INR": 3491292.81,
+      "MAPE_pct": 22.63,
+      "R2_score": 0.7401,
+      "sample_count": 156,
+      "median_actual_inr": 6000000.0
+    },
+    "Kochi": {
+      "MAE_INR": 2840032.21,
+      "RMSE_INR": 4852576.88,
+      "MAPE_pct": 26.34,
+      "R2_score": 0.7335,
+      "sample_count": 203,
+      "median_actual_inr": 8500000.0
+    },
+    "Kolkata": {
+      "MAE_INR": 2460348.5,
+      "RMSE_INR": 5632906.86,
+      "MAPE_pct": 28.31,
+      "R2_score": 0.6693,
+      "sample_count": 529,
+      "median_actual_inr": 4900000.0
+    },
+    "Lucknow": {
+      "MAE_INR": 1611793.54,
+      "RMSE_INR": 3391731.79,
+      "MAPE_pct": 22.44,
+      "R2_score": 0.517,
+      "sample_count": 172,
+      "median_actual_inr": 6525000.0
+    },
+    "Mangalore": {
+      "MAE_INR": 1402104.57,
+      "RMSE_INR": 2592504.23,
+      "MAPE_pct": 20.72,
+      "R2_score": 0.7246,
+      "sample_count": 77,
+      "median_actual_inr": 5000000.0
+    },
+    "Mohali": {
+      "MAE_INR": 2247191.5,
+      "RMSE_INR": 4025270.85,
+      "MAPE_pct": 26.1,
+      "R2_score": 0.6396,
+      "sample_count": 285,
+      "median_actual_inr": 6500000.0
+    },
+    "Mumbai": {
+      "MAE_INR": 10627536.21,
+      "RMSE_INR": 21757526.32,
+      "MAPE_pct": 37.15,
+      "R2_score": 0.6631,
+      "sample_count": 164,
+      "median_actual_inr": 21500000.0
+    },
+    "Nagpur": {
+      "MAE_INR": 1633250.23,
+      "RMSE_INR": 2639588.07,
+      "MAPE_pct": 26.37,
+      "R2_score": 0.2713,
+      "sample_count": 66,
+      "median_actual_inr": 5000000.0
+    },
+    "Nashik": {
+      "MAE_INR": 713923.96,
+      "RMSE_INR": 911911.95,
+      "MAPE_pct": 17.09,
+      "R2_score": 0.7324,
+      "sample_count": 55,
+      "median_actual_inr": 4300000.0
+    },
+    "Navi Mumbai": {
+      "MAE_INR": 3251939.71,
+      "RMSE_INR": 6208439.73,
+      "MAPE_pct": 24.75,
+      "R2_score": 0.5516,
+      "sample_count": 70,
+      "median_actual_inr": 9200000.0
+    },
+    "Noida": {
+      "MAE_INR": 2708742.98,
+      "RMSE_INR": 4359445.66,
+      "MAPE_pct": 22.32,
+      "R2_score": 0.8152,
+      "sample_count": 243,
+      "median_actual_inr": 8500000.0
+    },
+    "Palghar": {
+      "MAE_INR": 748909.08,
+      "RMSE_INR": 1134471.26,
+      "MAPE_pct": 28.72,
+      "R2_score": 0.4663,
+      "sample_count": 100,
+      "median_actual_inr": 2400000.0
+    },
+    "Panchkula": {
+      "MAE_INR": 2632964.98,
+      "RMSE_INR": 3170643.88,
+      "MAPE_pct": 19.65,
+      "R2_score": 0.9077,
+      "sample_count": 50,
+      "median_actual_inr": 15000000.0
+    },
+    "Patna": {
+      "MAE_INR": 1754174.6,
+      "RMSE_INR": 3020988.07,
+      "MAPE_pct": 19.8,
+      "R2_score": 0.4669,
+      "sample_count": 155,
+      "median_actual_inr": 7020000.0
+    },
+    "Pune": {
+      "MAE_INR": 2401899.99,
+      "RMSE_INR": 4327805.0,
+      "MAPE_pct": 24.94,
+      "R2_score": 0.7795,
+      "sample_count": 434,
+      "median_actual_inr": 7500000.0
+    },
+    "Raipur": {
+      "MAE_INR": 717459.07,
+      "RMSE_INR": 1316785.36,
+      "MAPE_pct": 19.11,
+      "R2_score": 0.5269,
+      "sample_count": 108,
+      "median_actual_inr": 3240000.0
+    },
+    "Ranchi": {
+      "MAE_INR": 1087445.98,
+      "RMSE_INR": 1509165.25,
+      "MAPE_pct": 18.68,
+      "R2_score": 0.6711,
+      "sample_count": 194,
+      "median_actual_inr": 5500000.0
+    },
+    "Siliguri": {
+      "MAE_INR": 884584.02,
+      "RMSE_INR": 1475391.48,
+      "MAPE_pct": 17.34,
+      "R2_score": 0.7395,
+      "sample_count": 84,
+      "median_actual_inr": 3910000.0
+    },
+    "Sonipat": {
+      "MAE_INR": 1364170.64,
+      "RMSE_INR": 2075619.55,
+      "MAPE_pct": 29.02,
+      "R2_score": 0.5384,
+      "sample_count": 153,
+      "median_actual_inr": 5000000.0
+    },
+    "Surat": {
+      "MAE_INR": 1831188.56,
+      "RMSE_INR": 4154294.24,
+      "MAPE_pct": 21.1,
+      "R2_score": 0.7851,
+      "sample_count": 426,
+      "median_actual_inr": 6000000.0
+    },
+    "Thane": {
+      "MAE_INR": 2731129.69,
+      "RMSE_INR": 4414426.0,
+      "MAPE_pct": 32.37,
+      "R2_score": 0.7733,
+      "sample_count": 193,
+      "median_actual_inr": 7500000.0
+    },
+    "Trivandrum": {
+      "MAE_INR": 2028339.35,
+      "RMSE_INR": 2638413.49,
+      "MAPE_pct": 24.3,
+      "R2_score": 0.3152,
+      "sample_count": 54,
+      "median_actual_inr": 8000000.0
+    },
+    "Vadodara": {
+      "MAE_INR": 1108516.4,
+      "RMSE_INR": 2254758.77,
+      "MAPE_pct": 21.5,
+      "R2_score": 0.6339,
+      "sample_count": 479,
+      "median_actual_inr": 4000000.0
+    },
+    "Varanasi": {
+      "MAE_INR": 1930685.88,
+      "RMSE_INR": 3453286.04,
+      "MAPE_pct": 28.62,
+      "R2_score": 0.118,
+      "sample_count": 51,
+      "median_actual_inr": 5500000.0
+    },
+    "Vijayawada": {
+      "MAE_INR": 1060046.62,
+      "RMSE_INR": 1550403.04,
+      "MAPE_pct": 20.75,
+      "R2_score": 0.803,
+      "sample_count": 93,
+      "median_actual_inr": 4500000.0
+    },
+    "Visakhapatnam": {
+      "MAE_INR": 1611494.23,
+      "RMSE_INR": 2574618.76,
+      "MAPE_pct": 23.3,
+      "R2_score": 0.7492,
+      "sample_count": 383,
+      "median_actual_inr": 5600000.0
+    },
+    "Zirakpur": {
+      "MAE_INR": 1345553.0,
+      "RMSE_INR": 2052658.19,
+      "MAPE_pct": 19.06,
+      "R2_score": 0.4538,
+      "sample_count": 306,
+      "median_actual_inr": 6500000.0
+    }
+  }
+}
