@@ -121,7 +121,7 @@ function ValuationResultPanel({
         bevelDepth={34}
         frost={0.36}
         tint={0.065}
-        className="p-12 flex flex-col items-center justify-center text-center h-[560px]"
+        className="p-6 sm:p-12 flex flex-col items-center justify-center text-center min-h-[460px]"
       >
         <div className="p-5 rounded-full bg-white/[0.05] border border-white/20 text-[var(--color-accent)] mb-4 shadow-[0_8px_30px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.4)]">
           <Building2 size={36} />
@@ -160,14 +160,14 @@ function ValuationResultPanel({
         bevelDepth={34}
         frost={0.36}
         tint={0.065}
-        className="p-8 sm:p-9"
+        className="p-5 sm:p-8 lg:p-9"
       >
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-5 border-b border-white/10">
           <div>
             <span className="text-xs sm:text-sm font-mono font-medium uppercase tracking-wider text-white/50">
               Estimated Market Asking Price
             </span>
-            <div className="text-5xl sm:text-6xl font-extrabold tabular-nums tracking-tight text-[var(--color-accent)] mt-2 font-heading [text-shadow:0_2px_16px_rgba(39,215,174,0.3)]">
+            <div className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tabular-nums tracking-tight text-[var(--color-accent)] mt-2 font-heading [text-shadow:0_2px_16px_rgba(39,215,174,0.3)]">
               {formatCurrency(result.estimated_price)}
             </div>
           </div>
@@ -212,7 +212,7 @@ function ValuationResultPanel({
         bevelDepth={30}
         frost={0.36}
         tint={0.06}
-        className="p-8 space-y-4"
+        className="p-5 sm:p-8 space-y-4"
       >
         <div className="flex items-center justify-between">
           <span className="text-sm sm:text-base font-bold uppercase tracking-wider text-white flex items-center gap-2">
@@ -275,7 +275,7 @@ function ValuationResultPanel({
           bevelDepth={30}
           frost={0.36}
           tint={0.06}
-          className="p-7 space-y-4"
+          className="p-5 sm:p-7 space-y-4"
         >
           <div className="flex items-center justify-between pb-4 border-b border-white/10">
             <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-white flex items-center gap-2">
@@ -348,7 +348,7 @@ function ValuationResultPanel({
           bevelDepth={30}
           frost={0.36}
           tint={0.06}
-          className="p-7 space-y-4"
+          className="p-5 sm:p-7 space-y-4"
         >
           <div className="flex items-center justify-between pb-4 border-b border-white/10">
             <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-white flex items-center gap-2">

@@ -71,13 +71,13 @@ function OverviewPanel({
     <div className="space-y-8 pb-12 animate-panel-enter">
       {/* Overview-Only Page Header */}
       <LiquidGlass
-        radius={999}
+        radius={32}
         scale={42}
         aberration={14}
         bevelDepth={22}
         frost={0.36}
         tint={0.075}
-        className="px-7 py-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4"
+        className="p-5 sm:px-7 sm:py-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4"
       >
         <div className="min-w-0">
           <div className="flex items-center gap-2">
@@ -94,7 +94,7 @@ function OverviewPanel({
           </h2>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3 flex-shrink-0">
+        <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 flex-shrink-0">
           <LiquidGlassButton
             data-testid="performance-mode-toggle"
             onClick={toggleMode}
@@ -109,7 +109,7 @@ function OverviewPanel({
                 ? 'Performance Mode active — click for Full FX Experience'
                 : 'Full FX Experience active — click for Performance Mode'
             }
-            glassClassName="px-4 py-2.5 text-xs font-mono font-medium whitespace-nowrap text-white/90"
+            glassClassName="px-3 sm:px-4 py-2 sm:py-2.5 text-xs font-mono font-medium whitespace-nowrap text-white/90"
           >
             {isLightweight ? (
               <Zap size={14} className="flex-shrink-0" />
@@ -126,7 +126,7 @@ function OverviewPanel({
             bevelDepth={12}
             frost={0.36}
             tint={0.08}
-            contentClassName="flex items-center gap-2.5 px-4 py-2.5 text-xs font-mono font-medium whitespace-nowrap"
+            contentClassName="flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 text-xs font-mono font-medium whitespace-nowrap"
           >
             <span className="relative flex h-2.5 w-2.5 flex-shrink-0">
               {!isLightweight && (isReady || modelStatus === 'loading') && (
@@ -151,11 +151,16 @@ function OverviewPanel({
               />
             </span>
             <span className="text-white/90">
-              {isReady
-                ? 'Model Active · HistGradientBoosting'
-                : modelStatus === 'loading'
-                  ? 'Connecting to Engine...'
-                  : 'Model Offline'}
+              {isReady ? (
+                <>
+                  Model Active
+                  <span className="hidden sm:inline text-white/50"> · HistGradientBoosting</span>
+                </>
+              ) : modelStatus === 'loading' ? (
+                'Connecting to Engine...'
+              ) : (
+                'Model Offline'
+              )}
             </span>
           </LiquidGlass>
 
@@ -167,7 +172,7 @@ function OverviewPanel({
             bevelDepth={14}
             frost={0.44}
             tint={0.2}
-            glassClassName="px-5 py-2.5 text-xs sm:text-sm font-semibold whitespace-nowrap !border-white/50 text-white"
+            glassClassName="px-4 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold whitespace-nowrap !border-white/50 text-white"
           >
             <PlusCircle size={15} />
             <span>New Valuation</span>
@@ -183,9 +188,9 @@ function OverviewPanel({
         bevelDepth={36}
         frost={0.36}
         tint={0.07}
-        className="p-10 sm:p-14"
+        className="p-6 sm:p-10 lg:p-14"
       >
-        <div className="relative z-10 max-w-4xl space-y-6">
+        <div className="relative z-10 max-w-4xl space-y-4 sm:space-y-6">
           <LiquidGlass
             radius={999}
             scale={34}
@@ -193,25 +198,25 @@ function OverviewPanel({
             bevelDepth={12}
             frost={0.32}
             tint={0.075}
-            className="inline-flex"
-            contentClassName="inline-flex items-center gap-3 px-4 py-2 text-xs sm:text-sm font-mono text-white/80"
+            className="inline-flex max-w-full"
+            contentClassName="inline-flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-mono text-white/80 truncate"
           >
-            <span className="w-2.5 h-2.5 rounded-full bg-[var(--color-accent)] shadow-[0_0_10px_var(--color-accent)]" />
-            <span className="font-semibold text-white tracking-wide">NESTOR VALUATION CORE</span>
-            <span className="text-white/30">|</span>
-            <span className="text-white/70">65,000 Verified Listings · 20 Metros</span>
+            <span className="w-2.5 h-2.5 rounded-full bg-[var(--color-accent)] shadow-[0_0_10px_var(--color-accent)] flex-shrink-0" />
+            <span className="font-semibold text-white tracking-wide truncate">NESTOR VALUATION CORE</span>
+            <span className="text-white/30 hidden sm:inline">|</span>
+            <span className="text-white/70 hidden sm:inline">65,000 Verified Listings · 20 Metros</span>
           </LiquidGlass>
 
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-heading font-bold text-white tracking-tight leading-[1.05] [text-shadow:0_2px_16px_rgba(0,0,0,0.4)]">
+          <h1 className="text-3xl sm:text-5xl lg:text-7xl font-heading font-bold text-white tracking-tight leading-[1.08] [text-shadow:0_2px_16px_rgba(0,0,0,0.4)]">
             Precision Property Valuation Intelligence, Calibrated for Capital.
           </h1>
 
-          <p className="text-white/80 font-body font-light text-lg sm:text-xl max-w-3xl leading-relaxed [text-shadow:0_1px_8px_rgba(0,0,0,0.3)]">
+          <p className="text-white/80 font-body font-light text-base sm:text-lg lg:text-xl max-w-3xl leading-relaxed [text-shadow:0_1px_8px_rgba(0,0,0,0.3)]">
             Empirical machine learning models trained on 65,000 verified listings across 20 Indian metropolitan markets. 
             Instant asking price estimation, statistically calibrated 80% confidence envelopes, and automated micro-market comparable retrieval.
           </p>
 
-          <div className="pt-4 flex flex-wrap items-center gap-6">
+          <div className="pt-2 sm:pt-4 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-4 sm:gap-6">
             <LiquidGlassButton
               onClick={onNavigateToValuation}
               radius={999}
@@ -220,7 +225,7 @@ function OverviewPanel({
               bevelDepth={16}
               frost={0.32}
               tint={0.11}
-              glassClassName="px-9 py-4 text-base font-semibold tracking-[-0.01em]"
+              glassClassName="px-6 sm:px-9 py-3.5 sm:py-4 text-sm sm:text-base font-semibold tracking-[-0.01em] justify-center"
             >
               <span>Launch Valuation Workspace</span>
               <ArrowUpRight className="h-5 w-5 text-[var(--color-accent)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
@@ -233,12 +238,12 @@ function OverviewPanel({
               bevelDepth={16}
               frost={0.44}
               tint={0.2}
-              glassClassName="px-9 py-4 text-base font-semibold tracking-[-0.01em] !border-white/50 text-white"
+              glassClassName="px-6 sm:px-9 py-3.5 sm:py-4 text-sm sm:text-base font-semibold tracking-[-0.01em] !border-white/50 text-white justify-center"
             >
               <span>Instant Estimation</span>
               <ArrowUpRight className="h-5 w-5" />
             </LiquidGlassButton>
-            <div className="flex items-center gap-4 text-xs font-mono text-white/60 pl-2">
+            <div className="flex items-center gap-3 text-xs font-mono text-white/60 sm:pl-2">
               <span className="text-[var(--color-accent)] font-semibold">Holdout MAPE: 24.36%</span>
               <span>·</span>
               <span className="text-[var(--color-accent-blue)] font-semibold">R²: 0.7524</span>
@@ -258,7 +263,7 @@ function OverviewPanel({
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-white/10"
       >
         {/* Metric 1: Cleaned Listings */}
-        <div className="p-7 sm:p-8 flex flex-col justify-between hover:bg-[rgba(255,255,255,0.015)] transition-colors">
+        <div className="p-5 sm:p-7 lg:p-8 flex flex-col justify-between hover:bg-[rgba(255,255,255,0.015)] transition-colors">
           <div className="flex items-center justify-between">
             <span className="text-xs font-mono font-medium uppercase tracking-wider text-[var(--color-text-muted)]">
               Verified Properties
@@ -267,19 +272,19 @@ function OverviewPanel({
               <Database size={18} />
             </div>
           </div>
-          <div className="mt-5">
-            <div className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight tabular-nums text-[var(--color-text-primary)]">
+          <div className="mt-4 sm:mt-5">
+            <div className="text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight tabular-nums text-[var(--color-text-primary)]">
               65,000
             </div>
-            <p className="text-xs sm:text-sm text-[var(--color-text-secondary)] mt-2 flex items-center gap-2">
+            <p className="text-xs sm:text-sm text-[var(--color-text-secondary)] mt-1.5 sm:mt-2 flex items-center gap-2">
               <span className="inline-block w-2 h-2 rounded-full bg-[var(--color-accent)]" />
-              Cleaned & Deduplicated Listings
+              Cleaned &amp; Deduplicated Listings
             </p>
           </div>
         </div>
 
         {/* Metric 2: Coverage Hubs */}
-        <div className="p-7 sm:p-8 flex flex-col justify-between hover:bg-[rgba(255,255,255,0.015)] transition-colors">
+        <div className="p-5 sm:p-7 lg:p-8 flex flex-col justify-between hover:bg-[rgba(255,255,255,0.015)] transition-colors">
           <div className="flex items-center justify-between">
             <span className="text-xs font-mono font-medium uppercase tracking-wider text-[var(--color-text-muted)]">
               Market Coverage
@@ -288,11 +293,11 @@ function OverviewPanel({
               <TrendingUp size={18} />
             </div>
           </div>
-          <div className="mt-5">
-            <div className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight tabular-nums text-[var(--color-text-primary)]">
+          <div className="mt-4 sm:mt-5">
+            <div className="text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight tabular-nums text-[var(--color-text-primary)]">
               20 Metros
             </div>
-            <p className="text-xs sm:text-sm text-[var(--color-text-secondary)] mt-2 flex items-center gap-2">
+            <p className="text-xs sm:text-sm text-[var(--color-text-secondary)] mt-1.5 sm:mt-2 flex items-center gap-2">
               <span className="inline-block w-2 h-2 rounded-full bg-[var(--color-accent-blue)]" />
               Pan-India Urban Micro-Markets
             </p>
@@ -300,7 +305,7 @@ function OverviewPanel({
         </div>
 
         {/* Metric 3: Champion Accuracy */}
-        <div className="p-7 sm:p-8 flex flex-col justify-between hover:bg-[rgba(255,255,255,0.015)] transition-colors">
+        <div className="p-5 sm:p-7 lg:p-8 flex flex-col justify-between hover:bg-[rgba(255,255,255,0.015)] transition-colors">
           <div className="flex items-center justify-between">
             <span className="text-xs font-mono font-medium uppercase tracking-wider text-[var(--color-text-muted)]">
               Model Performance
@@ -309,24 +314,24 @@ function OverviewPanel({
               <Scale size={18} />
             </div>
           </div>
-          <div className="mt-5">
+          <div className="mt-4 sm:mt-5">
             <div className="flex items-baseline gap-2">
-              <div className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight tabular-nums text-[var(--color-accent)]">
+              <div className="text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight tabular-nums text-[var(--color-accent)]">
                 24.36%
               </div>
               <span className="text-xs sm:text-sm font-mono text-[var(--color-text-muted)]">
                 MAPE
               </span>
             </div>
-            <p className="text-xs sm:text-sm text-[var(--color-text-secondary)] mt-2 flex items-center gap-2">
+            <p className="text-xs sm:text-sm text-[var(--color-text-secondary)] mt-1.5 sm:mt-2 flex items-center gap-2">
               <span className="text-[var(--color-accent)] font-mono font-semibold">R² 0.7524</span>
-              <span>· 13,000 Holdout Records</span>
+              <span>· 13,000 Records</span>
             </p>
           </div>
         </div>
 
         {/* Metric 4: System Status */}
-        <div className="p-7 sm:p-8 flex flex-col justify-between hover:bg-[rgba(255,255,255,0.015)] transition-colors">
+        <div className="p-5 sm:p-7 lg:p-8 flex flex-col justify-between hover:bg-[rgba(255,255,255,0.015)] transition-colors">
           <div className="flex items-center justify-between">
             <span className="text-xs font-mono font-medium uppercase tracking-wider text-[var(--color-text-muted)]">
               Inference Status
@@ -335,7 +340,7 @@ function OverviewPanel({
               <Cpu size={18} />
             </div>
           </div>
-          <div className="mt-5">
+          <div className="mt-4 sm:mt-5">
             <div className="flex items-center gap-2.5">
               <span className="relative flex h-3 w-3">
                 {!isLightweight && (
@@ -349,12 +354,12 @@ function OverviewPanel({
                   style={{ backgroundColor: isReady ? 'var(--color-accent)' : 'var(--color-danger)' }}
                 />
               </span>
-              <span className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[var(--color-text-primary)]">
+              <span className="text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[var(--color-text-primary)]">
                 {isReady ? 'Active' : 'Degraded'}
               </span>
             </div>
-            <p className="text-xs sm:text-sm text-[var(--color-text-secondary)] mt-2">
-              HistGradientBoosting · &lt;45ms Latency
+            <p className="text-xs sm:text-sm text-[var(--color-text-secondary)] mt-1.5 sm:mt-2">
+              HistGradientBoosting · &lt;45ms
             </p>
           </div>
         </div>
@@ -370,14 +375,14 @@ function OverviewPanel({
           bevelDepth={32}
           frost={0.36}
           tint={0.06}
-          className="lg:col-span-7 p-8 sm:p-9 flex flex-col justify-between"
+          className="lg:col-span-7 p-5 sm:p-8 lg:p-9 flex flex-col justify-between"
         >
           <div>
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-5 border-b border-white/10">
               <div>
                 <h2 className="text-lg sm:text-xl font-bold font-heading text-[var(--color-text-primary)] flex items-center gap-2.5">
                   <BarChart3 size={20} className="text-[var(--color-accent)]" />
-                  Metro Market Unit Rates & Velocity
+                  Metro Market Unit Rates &amp; Velocity
                 </h2>
                 <p className="text-xs sm:text-sm text-[var(--color-text-secondary)] mt-1">
                   Mean unit asking rate (₹/sq.ft.) across key Indian urban hubs
@@ -403,7 +408,7 @@ function OverviewPanel({
                   bevelDepth={10}
                   frost={0.4}
                   tint={activeMetric === 'rate' ? 0.22 : 0.08}
-                  glassClassName={`px-4 py-1.5 text-xs font-semibold ${
+                  glassClassName={`px-3 sm:px-4 py-1.5 text-xs font-semibold ${
                     activeMetric === 'rate'
                       ? '!border-white/55 text-white'
                       : 'text-white/65 hover:text-white !border-white/15'
@@ -419,7 +424,7 @@ function OverviewPanel({
                   bevelDepth={10}
                   frost={0.4}
                   tint={activeMetric === 'listings' ? 0.22 : 0.08}
-                  glassClassName={`px-4 py-1.5 text-xs font-semibold ${
+                  glassClassName={`px-3 sm:px-4 py-1.5 text-xs font-semibold ${
                     activeMetric === 'listings'
                       ? '!border-white/55 text-white'
                       : 'text-white/65 hover:text-white !border-white/15'
@@ -430,8 +435,8 @@ function OverviewPanel({
               </LiquidGlass>
             </div>
 
-            {/* Recharts Chart - Scaled to h-80 sm:h-96 */}
-            <div className="h-80 sm:h-96 w-full mt-8">
+            {/* Recharts Chart - Scaled to h-72 sm:h-80 lg:h-96 */}
+            <div className="h-72 sm:h-80 lg:h-96 w-full mt-6 sm:mt-8">
               <ResponsiveContainer width="100%" height="100%">
                 {activeMetric === 'rate' ? (
                   <AreaChart data={CITY_RATES} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
@@ -550,7 +555,7 @@ function OverviewPanel({
             </div>
           </div>
 
-          <div className="pt-5 mt-4 border-t border-white/10 flex items-center justify-between text-xs sm:text-sm text-white/50">
+          <div className="pt-5 mt-4 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs sm:text-sm text-white/50">
             <span>Derived from 65,000 verified listings across 20 metro clusters</span>
             <span className="font-mono text-[var(--color-accent)] font-semibold">Live Telemetry Active</span>
           </div>
@@ -564,7 +569,7 @@ function OverviewPanel({
           bevelDepth={32}
           frost={0.36}
           tint={0.06}
-          className="lg:col-span-5 p-8 sm:p-9 flex flex-col justify-between"
+          className="lg:col-span-5 p-5 sm:p-8 lg:p-9 flex flex-col justify-between"
         >
           <div>
             <div className="flex items-center justify-between pb-5 border-b border-white/10">
@@ -574,7 +579,7 @@ function OverviewPanel({
                   Valuation Intelligence
                 </h2>
                 <p className="text-xs sm:text-sm text-[var(--color-text-secondary)] mt-1">
-                  Champion Model Specifications & Guardrails
+                  Champion Model Specifications &amp; Guardrails
                 </p>
               </div>
               <span className="px-3.5 py-1 rounded-full text-xs font-mono font-semibold bg-[rgba(39,215,174,0.12)] text-[var(--color-accent)] border border-[rgba(39,215,174,0.25)]">
@@ -582,8 +587,8 @@ function OverviewPanel({
               </span>
             </div>
 
-            <div className="space-y-4 mt-6">
-              <div className="liquid-glass-card rounded-2xl p-4 flex items-center justify-between">
+            <div className="space-y-3.5 sm:space-y-4 mt-6">
+              <div className="liquid-glass-card rounded-2xl p-3.5 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div>
                   <div className="text-xs text-white/50 uppercase tracking-wider font-mono">
                     Model Architecture
@@ -592,12 +597,12 @@ function OverviewPanel({
                     HistGradientBoostingRegressor
                   </div>
                 </div>
-                <span className="text-xs font-mono px-3.5 py-1 rounded-full bg-white/10 text-white/80">
+                <span className="text-xs font-mono px-3 py-1 rounded-full bg-white/10 text-white/80 self-start sm:self-auto">
                   Log1p Transformed
                 </span>
               </div>
 
-              <div className="liquid-glass-card rounded-2xl p-4 flex items-center justify-between">
+              <div className="liquid-glass-card rounded-2xl p-3.5 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div>
                   <div className="text-xs text-white/50 uppercase tracking-wider font-mono">
                     Data Split (Train / Test)
@@ -606,12 +611,12 @@ function OverviewPanel({
                     52,000 Train / 13,000 Holdout
                   </div>
                 </div>
-                <span className="text-xs font-mono font-semibold text-[var(--color-accent)]">
+                <span className="text-xs font-mono font-semibold text-[var(--color-accent)] self-start sm:self-auto">
                   80 / 20 Split
                 </span>
               </div>
 
-              <div className="liquid-glass-card rounded-2xl p-4 flex items-center justify-between">
+              <div className="liquid-glass-card rounded-2xl p-3.5 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div>
                   <div className="text-xs text-white/50 uppercase tracking-wider font-mono">
                     Test MAE / Median Error
@@ -620,12 +625,12 @@ function OverviewPanel({
                     ₹25.62 Lakhs / ₹12.40 Lakhs
                   </div>
                 </div>
-                <span className="text-xs font-mono font-semibold text-[var(--color-accent-blue)]">
+                <span className="text-xs font-mono font-semibold text-[var(--color-accent-blue)] self-start sm:self-auto">
                   R² = 0.7524
                 </span>
               </div>
 
-              <div className="liquid-glass-card rounded-2xl p-4 flex items-center justify-between">
+              <div className="liquid-glass-card rounded-2xl p-3.5 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                 <div>
                   <div className="text-xs text-white/50 uppercase tracking-wider font-mono">
                     Target Guardrail
@@ -635,7 +640,7 @@ function OverviewPanel({
                     Price Field Excluded
                   </div>
                 </div>
-                <span className="text-xs font-mono px-3 py-1 rounded-full bg-[rgba(39,215,174,0.12)] text-[var(--color-accent)]">
+                <span className="text-xs font-mono px-3 py-1 rounded-full bg-[rgba(39,215,174,0.12)] text-[var(--color-accent)] self-start sm:self-auto">
                   Enforced
                 </span>
               </div>
@@ -671,7 +676,7 @@ function OverviewPanel({
           bevelDepth={32}
           frost={0.36}
           tint={0.06}
-          className="p-8 sm:p-9"
+          className="p-5 sm:p-8 lg:p-9"
         >
           <div className="flex items-center justify-between pb-5 border-b border-white/10">
             <div>
@@ -724,7 +729,7 @@ function OverviewPanel({
           bevelDepth={32}
           frost={0.36}
           tint={0.06}
-          className="p-8 sm:p-9"
+          className="p-5 sm:p-8 lg:p-9"
         >
           <div className="flex items-center justify-between pb-5 border-b border-white/10">
             <div>

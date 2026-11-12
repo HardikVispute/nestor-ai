@@ -212,7 +212,7 @@ function MarketIntelligencePanel({
         bevelDepth={34}
         frost={0.36}
         tint={0.065}
-        className="p-8 sm:p-10 space-y-6"
+        className="p-5 sm:p-8 lg:p-10 space-y-6"
       >
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-white/10">
           <div>

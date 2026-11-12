@@ -176,7 +176,7 @@ export default function Home() {
       {/* 02. Main Workspace Layout (no global header; Overview renders its own Overview header) */}
       <div className="relative z-10 flex flex-col flex-1 min-w-0 h-screen overflow-hidden">
         {/* Scrollable Main Content */}
-        <main className="flex-1 overflow-y-auto px-6 lg:px-8 py-7">
+        <main className="flex-1 overflow-y-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-7 pb-24 md:pb-7">
           <div className="max-w-7xl mx-auto w-full">
             {activeNav === 'overview' && (
               <OverviewPanel
@@ -196,7 +196,7 @@ export default function Home() {
                   bevelDepth={32}
                   frost={0.36}
                   tint={0.06}
-                  className="lg:col-span-5 p-7"
+                  className="lg:col-span-5 p-4 sm:p-7"
                 >
                   <PropertyForm
                     onSubmit={handleValuationSubmit}

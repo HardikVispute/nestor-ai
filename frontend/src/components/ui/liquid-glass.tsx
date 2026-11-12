@@ -102,13 +102,18 @@ export function LiquidGlass({
   const [mode, setMode] = useState<"pending" | "simple" | "opaque">("pending");
 
   useEffect(() => {
-    if (prefersReducedTransparency()) setMode("opaque");
-    else if (isLightweight || isSafariLike() || !supportsUrlBackdropFilter()) {
+    const isMobileViewport = typeof window !== "undefined" && window.innerWidth < 768;
+    if (prefersReducedTransparency()) {
+      setMode("opaque");
+    } else if (isLightweight || isSafariLike() || !supportsUrlBackdropFilter()) {
+      setMode("simple");
+    } else if (isMobileViewport && bevelDepth >= 24) {
+      // On small mobile screens, large panels use frosted glass to avoid GPU shader glitching
       setMode("simple");
     } else {
       setMode("pending");
     }
-  }, [isLightweight]);
+  }, [isLightweight, bevelDepth]);
 
   // Lazy visibility tracking: skip computing/compositing displacement filters while off-screen
   useEffect(() => {
@@ -203,8 +208,8 @@ export function LiquidGlass({
           ? "none"
           : "blur(22px) saturate(1.55)"
         : activeFilter
-          ? `url(#${activeFilter.id}) saturate(1.95) brightness(1.08) contrast(1.04)`
-          : "blur(20px) saturate(1.7) brightness(1.05)";
+          ? `url(#${activeFilter.id}) saturate(1.4) brightness(1.02)`
+          : "blur(20px) saturate(1.5)";
 
   return (
     <div

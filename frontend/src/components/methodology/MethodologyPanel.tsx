@@ -25,7 +25,7 @@ function MethodologyPanel() {
         bevelDepth={30}
         frost={0.36}
         tint={0.06}
-        className="p-8 sm:p-10 flex flex-col md:flex-row md:items-center justify-between gap-4"
+        className="p-5 sm:p-8 lg:p-10 flex flex-col md:flex-row md:items-center justify-between gap-4"
       >
         <div>
           <h2 className="text-2xl sm:text-3xl font-bold font-heading text-white flex items-center gap-3">
@@ -51,7 +51,7 @@ function MethodologyPanel() {
         bevelDepth={30}
         frost={0.36}
         tint={0.06}
-        className="p-8 sm:p-10 space-y-4"
+        className="p-5 sm:p-8 lg:p-10 space-y-4"
       >
         <div className="flex items-center gap-2 pb-3 border-b border-white/10">
           <Cpu size={18} className="text-[var(--color-accent)]" />
@@ -90,7 +90,7 @@ function MethodologyPanel() {
         bevelDepth={30}
         frost={0.36}
         tint={0.06}
-        className="p-8 sm:p-10 space-y-4"
+        className="p-5 sm:p-8 lg:p-10 space-y-4"
       >
         <div className="flex items-center gap-2 pb-3 border-b border-white/10">
           <Database size={18} className="text-[var(--color-accent-blue)]" />
@@ -159,7 +159,7 @@ function MethodologyPanel() {
         bevelDepth={30}
         frost={0.36}
         tint={0.06}
-        className="p-8 sm:p-10 space-y-4"
+        className="p-5 sm:p-8 lg:p-10 space-y-4"
       >
         <div className="flex items-center justify-between pb-4 border-b border-white/10">
           <div className="flex items-center gap-2.5">
@@ -239,7 +239,7 @@ function MethodologyPanel() {
         bevelDepth={30}
         frost={0.36}
         tint={0.06}
-        className="p-8 sm:p-10 space-y-4"
+        className="p-5 sm:p-8 lg:p-10 space-y-4"
       >
         <div className="flex items-center gap-2 pb-3 border-b border-white/10">
           <Scale size={18} className="text-[var(--color-accent)]" />

@@ -133,92 +133,158 @@ function Sidebar({ activeNav, onNavChange }: SidebarProps) {
   )
 
   return (
-    <div
-      className="relative flex-shrink-0 h-screen z-40 select-none flex items-center justify-center"
-      style={{ width: 100, minWidth: 100, maxWidth: 100 }}
-    >
-      <aside
-        className="relative z-40"
-        style={{ width: 76 }}
-        aria-label="Primary Floating Navigation"
+    <>
+      {/* Desktop Floating Navigation Dock (>= md) - 100% Original GitHub Implementation & Animations */}
+      <div
+        className="hidden md:flex relative flex-shrink-0 h-screen z-40 select-none items-center justify-center"
+        style={{ width: 100, minWidth: 100, maxWidth: 100 }}
       >
-        <LiquidGlass
-          eager
-          radius={999}
-          scale={32}
-          aberration={12}
-          bevelDepth={14}
-          frost={0.34}
-          tint={0.07}
-          className="w-full p-3 !border-white/25"
-          style={{
-            backgroundColor: isLightweight ? 'rgba(10, 14, 22, 0.9)' : 'rgba(255, 255, 255, 0.065)',
-          }}
+        <aside
+          className="relative z-40"
+          style={{ width: 76 }}
+          aria-label="Primary Floating Navigation"
         >
-          <nav
-            className="relative flex flex-col w-full"
-            style={{ gap: ITEM_GAP }}
+          <LiquidGlass
+            eager
+            radius={999}
+            scale={32}
+            aberration={12}
+            bevelDepth={14}
+            frost={0.34}
+            tint={0.07}
+            className="w-full p-3 !border-white/25"
+            style={{
+              backgroundColor: isLightweight ? 'rgba(10, 14, 22, 0.9)' : 'rgba(255, 255, 255, 0.065)',
+            }}
           >
-            {/* 5 Icon-Only Navigation Items */}
-            {NAV_ITEMS.map((item, idx) => {
-              const isSelected = idx === previewIndex
-              const Icon = item.icon
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  title={item.label}
-                  aria-label={item.label}
-                  onClick={() => onNavChange(item.id)}
-                  className={`relative z-10 flex items-center justify-center w-[52px] h-[52px] rounded-full transition-colors duration-200 focus:outline-none cursor-pointer ${
-                    isSelected
-                      ? 'text-white'
-                      : 'text-white/55 hover:text-white hover:bg-white/[0.08]'
-                  }`}
-                >
-                  <Icon size={25} className="flex-shrink-0" />
-                </button>
-              )
-            })}
-
-            {/* Hovering, Vertically Draggable Frosted Apple Liquid Glass Lens Bubble */}
-            <div
-              role="slider"
-              aria-label="Drag up or down to switch pages"
-              aria-valuemin={1}
-              aria-valuemax={NAV_ITEMS.length}
-              aria-valuenow={previewIndex + 1}
-              data-testid="sidebar-liquid-bubble"
-              onPointerDown={handleBubblePointerDown}
-              onPointerMove={handleBubblePointerMove}
-              onPointerUp={finishDrag}
-              onPointerCancel={finishDrag}
-              className={`absolute left-0 right-0 z-20 touch-none cursor-grab active:cursor-grabbing ${
-                dragTop !== null
-                  ? 'scale-[1.06]'
-                  : 'transition-[top,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-[1.04]'
-              }`}
-              style={{
-                top: currentBubbleTop,
-                width: ITEM_SIZE,
-                height: ITEM_SIZE,
-              }}
+            <nav
+              className="relative flex flex-col w-full"
+              style={{ gap: ITEM_GAP }}
             >
-              <LiquidGlass
-                eager
-                radius={999}
-                scale={30}
-                aberration={12}
-                bevelDepth={11}
-                frost={0.22}
-                tint={0.14}
-                className="w-full h-full !border-white/50 !shadow-[0_14px_34px_rgba(0,0,0,0.58),inset_0_2px_1px_rgba(255,255,255,0.75),inset_0_-1.5px_2px_rgba(0,0,0,0.28)]"
-              />
-            </div>
-          </nav>
-        </LiquidGlass>
-      </aside>
-    </div>
+              {/* 5 Icon-Only Navigation Items */}
+              {NAV_ITEMS.map((item, idx) => {
+                const isSelected = idx === previewIndex
+                const Icon = item.icon
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    title={item.label}
+                    aria-label={item.label}
+                    onClick={() => onNavChange(item.id)}
+                    className={`relative z-10 flex items-center justify-center w-[52px] h-[52px] rounded-full transition-colors duration-200 focus:outline-none cursor-pointer ${
+                      isSelected
+                        ? 'text-white'
+                        : 'text-white/55 hover:text-white hover:bg-white/[0.08]'
+                    }`}
+                  >
+                    <Icon size={25} className="flex-shrink-0" />
+                  </button>
+                )
+              })}
+
+              {/* Hovering, Vertically Draggable Frosted Apple Liquid Glass Lens Bubble */}
+              <div
+                role="slider"
+                aria-label="Drag up or down to switch pages"
+                aria-valuemin={1}
+                aria-valuemax={NAV_ITEMS.length}
+                aria-valuenow={previewIndex + 1}
+                data-testid="sidebar-liquid-bubble"
+                onPointerDown={handleBubblePointerDown}
+                onPointerMove={handleBubblePointerMove}
+                onPointerUp={finishDrag}
+                onPointerCancel={finishDrag}
+                className={`absolute left-0 right-0 z-20 touch-none cursor-grab active:cursor-grabbing ${
+                  dragTop !== null
+                    ? 'scale-[1.06]'
+                    : 'transition-[top,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-[1.04]'
+                }`}
+                style={{
+                  top: currentBubbleTop,
+                  width: ITEM_SIZE,
+                  height: ITEM_SIZE,
+                }}
+              >
+                <LiquidGlass
+                  eager
+                  radius={999}
+                  scale={30}
+                  aberration={12}
+                  bevelDepth={11}
+                  frost={0.22}
+                  tint={0.14}
+                  className="w-full h-full !border-white/50 !shadow-[0_14px_34px_rgba(0,0,0,0.58),inset_0_2px_1px_rgba(255,255,255,0.75),inset_0_-1.5px_2px_rgba(0,0,0,0.28)]"
+                />
+              </div>
+            </nav>
+          </LiquidGlass>
+        </aside>
+      </div>
+
+      {/* Mobile Floating Bottom Dock (< md) */}
+      <div className="md:hidden fixed bottom-3 left-1/2 -translate-x-1/2 z-50 select-none">
+        <aside aria-label="Mobile Bottom Navigation">
+          <LiquidGlass
+            eager
+            radius={999}
+            scale={24}
+            aberration={6}
+            bevelDepth={10}
+            frost={0.34}
+            tint={0.12}
+            className="p-1.5 !border-white/30 shadow-[0_12px_36px_rgba(0,0,0,0.7)]"
+            style={{
+              backgroundColor: isLightweight ? 'rgba(10, 14, 22, 0.94)' : 'rgba(255, 255, 255, 0.09)',
+            }}
+          >
+            <nav className="relative flex flex-row items-center gap-1">
+              {NAV_ITEMS.map((item, idx) => {
+                const isSelected = item.id === activeNav
+                const Icon = item.icon
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    title={item.label}
+                    aria-label={item.label}
+                    onClick={() => onNavChange(item.id)}
+                    className={`relative z-10 flex items-center justify-center w-11 h-11 rounded-full transition-all duration-200 cursor-pointer ${
+                      isSelected
+                        ? 'text-white'
+                        : 'text-white/55 hover:text-white'
+                    }`}
+                  >
+                    <Icon size={20} className="flex-shrink-0" />
+                  </button>
+                )
+              })}
+
+              {/* Mobile Active Liquid Glass Lens Pill */}
+              <div
+                className="absolute top-0 bottom-0 z-0 transition-[left] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] pointer-events-none"
+                style={{
+                  left: activeIndex * 48,
+                  width: 44,
+                  height: 44,
+                }}
+              >
+                <LiquidGlass
+                  eager
+                  radius={999}
+                  scale={22}
+                  aberration={6}
+                  bevelDepth={9}
+                  frost={0.22}
+                  tint={0.16}
+                  className="w-full h-full !border-white/60 !shadow-[0_8px_20px_rgba(0,0,0,0.5),inset_0_2px_1px_rgba(255,255,255,0.85)]"
+                />
+              </div>
+            </nav>
+          </LiquidGlass>
+        </aside>
+      </div>
+    </>
   )
 }
 
